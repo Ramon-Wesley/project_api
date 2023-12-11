@@ -20,7 +20,7 @@ describe("test the scheduling service entity",()=>{
             name:"  ",
             price:-10
         }
-        expect(new SchedulingServices(service.id,service.name,service.price))
+        expect(()=>new SchedulingServices(service.id,service.name,service.price))
         .toThrow("schedulingServices: Invalid scheduling services id!,schedulingServices: The schedulingServices name must be at least 2 characters long!,schedulingServices: The price must not be less than zero!")
        
     })

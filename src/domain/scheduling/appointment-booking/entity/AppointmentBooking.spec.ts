@@ -8,12 +8,13 @@ describe("test the appointment booking entity",()=>{
         const schedulingServices2=new SchedulingServices("321","service2",200)
         const appointmentBooking={
             id:"123",
+            customer_id:"123",
             employee_id:"123",
             animal_id:"123",
             date:new Date(),
 
         }
-        const result=new AppointmentBooking(appointmentBooking.id,appointmentBooking.employee_id,appointmentBooking.animal_id,appointmentBooking.date,[schedulingServices,schedulingServices2])
+        const result=new AppointmentBooking(appointmentBooking.customer_id,appointmentBooking.id,appointmentBooking.employee_id,appointmentBooking.animal_id,appointmentBooking.date,[schedulingServices,schedulingServices2])
 
         expect(result.Id).toBe(appointmentBooking.id)
         expect(result.Employee_id).toBe(appointmentBooking.employee_id)
@@ -30,13 +31,14 @@ describe("test the appointment booking entity",()=>{
         const schedulingServices2=new SchedulingServices("321","service2",200)
         const appointmentBooking={
             id:" ",
+            customer_id:" ",
             employee_id:"  ",
             animal_id:"  ",
             date:new Date("2000-01-01"),
 
         }
-        expect(()=>new AppointmentBooking(appointmentBooking.id,appointmentBooking.employee_id,appointmentBooking.animal_id,appointmentBooking.date,[schedulingServices,schedulingServices2]))
-        .toThrow("appointmentBooking: Invalid AppointmentBooking id services id!,appointmentBooking: Invalid employee id!,appointmentBooking: Invalid animal id!,appointmentBooking: Older date than supported!")
+        expect(()=>new AppointmentBooking(appointmentBooking.customer_id,appointmentBooking.id,appointmentBooking.employee_id,appointmentBooking.animal_id,appointmentBooking.date,[schedulingServices,schedulingServices2]))
+        .toThrow("appointmentBooking: Invalid AppointmentBooking id services id!,appointmentBooking: Invalid customer id!,appointmentBooking: Invalid employee id!,appointmentBooking: Invalid animal id!,appointmentBooking: Older date than supported!")
 
     })
 
@@ -44,13 +46,14 @@ describe("test the appointment booking entity",()=>{
  
         const appointmentBooking={
             id:"123",
+            customer_id:"123",
             employee_id:"123",
             animal_id:"123",
-            date:new Date("2000-01-01"),
+            date:new Date(),
 
         }
-        expect(()=>new AppointmentBooking(appointmentBooking.id,appointmentBooking.employee_id,appointmentBooking.animal_id,appointmentBooking.date,[]))
-        .toThrow("appointmentBooking: Older date than supported!,appointmentBooking: Service schedule cannot be empty!")
+        expect(()=>new AppointmentBooking(appointmentBooking.customer_id,appointmentBooking.id,appointmentBooking.employee_id,appointmentBooking.animal_id,appointmentBooking.date,[]))
+        .toThrow("appointmentBooking: Service schedule cannot be empty!")
 
     })
 })

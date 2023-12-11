@@ -5,14 +5,16 @@ import AppointmentBookingFactoryValidator from "../factory/AppointmentBooking.fa
 
 export default class AppointmentBooking extends Entity{
 
-    private employee_id:string;
+    private customer_id:string;
     private animal_id:string;
+    private employee_id:string;
     private date:Date;
     private schedulingServices:SchedulingServices[];
     private total:number;
 
-    constructor(id:string, employee_id:string,animal_id:string,date:Date,schedulingServices:SchedulingServices[]){
+    constructor(id:string,customer_id:string,employee_id:string,animal_id:string,date:Date,schedulingServices:SchedulingServices[]){
             super(id)
+            this.customer_id=customer_id
             this.employee_id=employee_id;
             this.animal_id=animal_id;
             this.date=date;

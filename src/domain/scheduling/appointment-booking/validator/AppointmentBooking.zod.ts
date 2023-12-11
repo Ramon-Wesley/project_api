@@ -5,6 +5,7 @@ export default class AppointmentBookingZodValidator implements ValidatorInterfac
     validate(entity: AppointmentBooking): void {
         const validator=z.object({
             id:z.string().trim().min(1,"Invalid AppointmentBooking id services id!"),
+            customer_id:z.string().trim().min(1,"Invalid customer id!"),
             employee_id:z.string().trim().min(1,"Invalid employee id!"),
             animal_id:z.string().trim().min(1,"Invalid animal id!"),
             date:z.coerce.date().min(new Date(new Date().toISOString().split('T')[0]) ,{
