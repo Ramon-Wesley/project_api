@@ -19,12 +19,7 @@ export default class EmployeeZodValidator implements ValidatorInterface<Employee
             
 
       try {
-        validation.parse({
-          name:entity.Name,
-          email:entity.Email,
-          ra:entity.Ra,
-          date_of_birth:entity.Date_of_birth
-        },)
+        validation.parse(entity)
         } catch (error) {
           const err=error as ZodError
           

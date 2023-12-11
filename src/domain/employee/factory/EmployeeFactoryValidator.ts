@@ -5,7 +5,7 @@ import EmployeeZodValidator from "../validator/Employee.zod";
 
 export default class EmployeeFactoryValidator{
 
-    public static create():ValidatorInterface<Employee>{
+    public static create(){
         return new EmployeeZodValidator();
     }
 }

@@ -1,7 +1,8 @@
 import Entity from "../../@shared/entity/Entity";
 import NotificationError from "../../@shared/notification/NotificationError";
+import Address from "../../@shared/object-value/address/Address";
 import EmployeeFactoryValidator from "../factory/EmployeeFactoryValidator";
-import Address from "../object-value/Address";
+
 
 
 export default class Employee extends Entity{

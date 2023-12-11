@@ -1,17 +1,19 @@
-import uuid from "uuid";
-import Address from "../object-value/Address";
+import {v4 as uuidv4} from "uuid";
+
 import Employee from "../entity/Employee";
+import Address from "../../@shared/object-value/address/Address";
 export default class EmployeeFactory{
 
-    private static create( name:string,
+     static create( name:string,
         ra:string,
         email:string,
         date_of_birth:Date):Employee
         {
-            return new Employee(uuid.v4(),name,ra,email,date_of_birth)
+            const uuid=uuidv4()
+            return new Employee(uuid,name,ra,email,date_of_birth)
         }
 
-        private static createWithAddress( 
+         static createWithAddress( 
             name:string,
             ra:string,
             email:string,
@@ -19,7 +21,8 @@ export default class EmployeeFactory{
             address:Address
             ):Employee
             {
-                const employee=new Employee(uuid.v4(),name,ra,email,date_of_birth);
+                const uuid=uuidv4()
+                const employee=new Employee(uuid,name,ra,email,date_of_birth);
                 employee.changeAddress(address)
                 return employee
             }
