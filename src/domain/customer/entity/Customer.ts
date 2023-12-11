@@ -1,7 +1,6 @@
 import Entity from "../../@shared/entity/Entity";
-import uuid from "uuid"
-import Address from "../object-value/Address";
-import Notification from "../../@shared/notification/Notification";
+
+import Address from "../../@shared/object-value/address/Address";
 import NotificationError from "../../@shared/notification/NotificationError";
 import CustomerFactoryValidator from "../factory/CustomerFactoryValidator";
 
@@ -14,20 +13,16 @@ export default class Customer extends Entity{
     private address?:Address;
     private isActive:boolean=true;
 
-    constructor( 
-        id:string,
-        name:string,
-        cpf:string,
-        email:string,
-        date_of_birth:Date){
+    constructor(id:string,name:string, cpf:string,email:string,date_of_birth:Date)
+{
         super(id)
         this.name=name;
         this.cpf=cpf;
         this.email=email;
         this.date_of_birth=date_of_birth;
         this.validate();
-        
         }
+
     activate(){
         this.isActive=true;
     }

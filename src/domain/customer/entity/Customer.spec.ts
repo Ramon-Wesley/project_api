@@ -1,5 +1,5 @@
 import Notification from "../../@shared/notification/Notification";
-import Address from "../object-value/Address";
+import Address from "../../@shared/object-value/address/Address";
 import Customer from "./Customer";
 
 describe("test the customer entity",()=>{

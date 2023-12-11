@@ -19,12 +19,7 @@ export default class CustomerZodValidator implements ValidatorInterface<Customer
             
 
       try {
-        validation.parse({
-          name:entity.Name,
-          email:entity.Email,
-          cpf:entity.Cpf,
-          date_of_birth:entity.Date_of_birth
-        },)
+        validation.parse(entity)
         } catch (error) {
           const err=error as ZodError
           

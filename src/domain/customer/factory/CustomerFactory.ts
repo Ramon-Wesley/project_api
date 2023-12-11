@@ -1,17 +1,21 @@
 import Customer from "../entity/Customer";
-import uuid from "uuid";
-import Address from "../object-value/Address";
+import { v4 as uuidv4 } from 'uuid';
+import Address from "../../@shared/object-value/address/Address";
+interface customerCreate{
+    name:string;
+    email:string;
+    cpf:string;
+    date_of_birth:Date;
+}
 export default class CustomerFactory{
 
-    private static create( name:string,
-        cpf:string,
-        email:string,
-        date_of_birth:Date):Customer
+    static create( name:string,cpf:string,email:string,date_of_birth:Date):Customer
         {
-            return new Customer(uuid.v4(),name,cpf,email,date_of_birth)
+            const id=uuidv4()
+            return new Customer(id,name,cpf,email,date_of_birth)
         }
 
-        private static createWithAddress( 
+      static createWithAddress( 
             name:string,
             cpf:string,
             email:string,
@@ -19,7 +23,8 @@ export default class CustomerFactory{
             address:Address
             ):Customer
             {
-                const customer=new Customer(uuid.v4(),name,cpf,email,date_of_birth);
+                const id=uuidv4()
+                const customer=new Customer(id,name,cpf,email,date_of_birth);
                 customer.changeAddress(address)
                 return customer
             }
