@@ -3,15 +3,13 @@ import NotificationError from "../../../../@shared/notification/NotificationErro
 import PurchaseOrderItemFactoryValidator from "../factory/PurchaseOrder-item.factory.validator";
 
 export default class PurchaseOrderItem extends Entity{
-    private purchaseOrder_id:string;
     private product_id:string;
     private quantity:number;
     private unitaryValue:number;
     private total:number=0;
 
-    constructor(id:string,purchaseOrder_id:string,product_id:string,quantity:number,unitaryValue:number){
+    constructor(id:string,product_id:string,quantity:number,unitaryValue:number){
             super(id)
-            this.purchaseOrder_id=purchaseOrder_id;
             this.product_id=product_id;
             this.quantity=quantity;
             this.unitaryValue=unitaryValue
@@ -24,11 +22,7 @@ export default class PurchaseOrderItem extends Entity{
             return this.quantity * this.unitaryValue;
          }
 
-         changePurchaseOrder(purchaseOrder_id:string){
-            this.purchaseOrder_id=purchaseOrder_id;
-            this.validate()
-         }
-         changeProductId(product_id:string){
+         changeProduct(product_id:string,name:string){
             this.product_id=product_id;
             this.validate()
          }
@@ -46,9 +40,7 @@ export default class PurchaseOrderItem extends Entity{
                 throw new NotificationError(this.notification.getErrors())
             }
          }
-         get PurchaseOrderId():string{
-            return this.purchaseOrder_id
-         }
+      
          get ProductId():string{
             return this.product_id;
          }

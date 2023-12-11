@@ -51,7 +51,8 @@ export default class PurchaseOrder extends Entity{
     changeDiscount(discount:number){
         this.discount=discount;
         const percentage=this.discount/100;
-        this.total=this.total*percentage;
+        const discountValue=this.total*percentage;
+        this.total-=discountValue
         this.validate()
     }
     changeDate(data:Date){
