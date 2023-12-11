@@ -4,15 +4,15 @@ import SaleOrderItemFactoryValidator from "../factory/SaleOrder-item.factory.val
 
 
 export default class SaleOrderItem extends Entity{
-    private saleOrder_id:string;
+
     private product_id:string;
     private quantity:number;
     private unitaryValue:number;
     private total:number=0;
 
-    constructor(id:string,saleOrder_id:string,product_id:string,quantity:number,unitaryValue:number){
+    constructor(id:string,product_id:string,quantity:number,unitaryValue:number){
             super(id)
-            this.saleOrder_id=saleOrder_id;
+
             this.product_id=product_id;
             this.quantity=quantity;
             this.unitaryValue=unitaryValue
@@ -25,10 +25,7 @@ export default class SaleOrderItem extends Entity{
             return this.quantity * this.unitaryValue;
          }
 
-         changeSaleOrder(saleOrder_id:string){
-            this.saleOrder_id=saleOrder_id;
-            this.validate()
-         }
+        
          changeProductId(product_id:string){
             this.product_id=product_id;
             this.validate()
@@ -47,9 +44,7 @@ export default class SaleOrderItem extends Entity{
                 throw new NotificationError(this.notification.getErrors())
             }
          }
-         get SaleOrderId():string{
-            return this.saleOrder_id
-         }
+        
          get ProductId():string{
             return this.product_id;
          }

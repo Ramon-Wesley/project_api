@@ -13,7 +13,6 @@ export default class SaleOrderItemZodValidator implements ValidatorInterface<Sal
     validate(entity: SaleOrderItem): void {
        const validation=z.object({
         id:z.string().trim().min(1,"Invalid saleOrder-item id!"),
-        saleOrder_id:z.string().trim().min(1,"Invalid saleOrder id!"),
         product_id:z.string().trim().min(1,"Invalid  product_id!"),
         quantity:z.number().min(1,"saleOrderItems must have at least 1 item!"),
         unitaryValue:z.number().min(0,"The unit value must not be less than zero!"),

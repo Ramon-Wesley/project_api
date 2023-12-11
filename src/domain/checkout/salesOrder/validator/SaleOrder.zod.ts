@@ -12,12 +12,11 @@ export default class SaleOrderZodValidator implements ValidatorInterface<SaleOrd
         employee_id:z.string().refine((value)=>value.trim().length > 0,"Invalid Employee_id!"), data:z.date(), 
         saleOrderItems:z.array(z.object({
             id:z.string().trim().min(1,"Invalid saleOrder-item id!"),
-            saleOrder_id:z.string().trim().min(1,"Invalid saleOrder id!"),
             product_id:z.string().trim().min(1,"Invalid  product_id!"),
             quantity:z.number().min(1,"SaleOrderItems must have at least 1 item!"),
             unitaryValue:z.number().min(0,"The unit value must not be less than zero!"),
             total:z.number().min(0).min(0,"The total must not be less than zero!"),
-        })).refine((value)=>value.length > 0),
+        })).refine((value)=>value.length > 0,"SaleOrderItems must have at least 1 item!"),
         total:z.number().min(0),
        discount:z.number().min(0)
        })
