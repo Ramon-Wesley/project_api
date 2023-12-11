@@ -1,5 +1,4 @@
-import Notification from "../../@shared/notification/Notification";
-import Address from "../object-value/Address";
+import Address from "../../@shared/object-value/address/Address";
 import Supplier from "./Supplier";
 
 describe("test the supplier entity",()=>{
@@ -9,7 +8,7 @@ describe("test the supplier entity",()=>{
         const supplier={
             id:"1234",
             name:"supplier1",
-            cnpj:"51.866.226/0001-00",
+            cnpj:"53.933.149/0001-90",
             email:"supplier@hotmail.com",
             date_of_birth:new Date("2000-01-01"),    
         }
@@ -19,6 +18,8 @@ describe("test the supplier entity",()=>{
         expect(result.Cnpj).toBe(supplier.cnpj)
         expect(result.Email).toBe(supplier.email)
     })
+
+
 
 
 
@@ -36,7 +37,7 @@ describe("test the supplier entity",()=>{
         const supplier={
             id:"1234",
             name:"supplier1",
-            cnpj:"51.866.226/0001-00",
+            cnpj:"53.933.149/0001-90",
             email:"supplier@hotmail.com",
             date_of_birth:new Date("2000-01-01"),    
         }
@@ -65,7 +66,7 @@ describe("test the supplier entity",()=>{
               supplier.email,
               supplier.date_of_birth
             );
-          }).toThrow("supplier: Invalid CNPJ!,supplier: Invalid Email!");
+          }).toThrow("supplier: Invalid Email!");
         
         
     })
@@ -74,7 +75,7 @@ describe("test the supplier entity",()=>{
         const supplier={
             id:"1234",
             name:"supplier",
-            cnpj:"51.866.226/0001-00",
+            cnpj:"53.933.149/0001-90",
             email:"supplier@hotmail.com",
             date_of_birth:new Date("2000-01-01"),    
         }
@@ -101,5 +102,7 @@ describe("test the supplier entity",()=>{
         
         
     })
+
+
 
 })

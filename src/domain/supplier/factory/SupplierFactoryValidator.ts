@@ -5,7 +5,7 @@ import SupplierZodValidator from "../validator/Supplier.zod";
 
 export default class SupplierFactoryValidator{
 
-    public static create():ValidatorInterface<Supplier>{
+    public static create(){
         return new SupplierZodValidator();
     }
 }

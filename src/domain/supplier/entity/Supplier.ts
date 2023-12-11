@@ -1,9 +1,7 @@
 import Entity from "../../@shared/entity/Entity";
-import uuid from "uuid"
-import Address from "../object-value/Address";
-import Notification from "../../@shared/notification/Notification";
 import NotificationError from "../../@shared/notification/NotificationError";
 import SupplierFactoryValidator from "../factory/SupplierFactoryValidator";
+import Address from "../../@shared/object-value/address/Address";
 
 export default class Supplier extends Entity{
 
@@ -20,15 +18,13 @@ export default class Supplier extends Entity{
         cnpj:string,
         email:string,
         date_of_birth:Date){
-          super(id)
+        super(id)
         this.name=name;
         this.cnpj=cnpj;
         this.email=email;
         this.date_of_birth=date_of_birth;
         this.validate();
-        if(this.notification.hasErrors()){
-            throw new NotificationError(this.notification.getErrors());
-        }
+        
         
         }
     activate(){
@@ -40,14 +36,18 @@ export default class Supplier extends Entity{
     }
 
 
-        validate(){
+        private validate(){
             SupplierFactoryValidator
             .create()
             .validate(this)    
+            if(this.notification.hasErrors()){
+              throw new NotificationError(this.notification.getErrors());
+          }
         }
 
         changeAddress(address:Address){
         this.address=address;
+        
         }
         
         changeName(name:string){

@@ -20,12 +20,7 @@ export default class SupplierZodValidator implements ValidatorInterface<Supplier
             
 
       try {
-        validation.parse({
-          name:entity.Name,
-          email:entity.Email,
-          cnpj:entity.Cnpj,
-          date_of_birth:entity.Date_of_birth
-        },)
+        validation.parse(entity)
         } catch (error) {
           const err=error as ZodError
           

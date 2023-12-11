@@ -1,17 +1,18 @@
+import Address from "../../@shared/object-value/address/Address";
 import Supplier from "../entity/Supplier";
-import uuid from "uuid";
-import Address from "../object-value/Address";
+import {v4 as uuidv4} from "uuid";
 export default class SupplierFactory{
 
-    private static create( name:string,
+     static create( name:string,
         cnpj:string,
         email:string,
         date_of_birth:Date):Supplier
         {
-            return new Supplier(uuid.v4(),name,cnpj,email,date_of_birth)
+            const uuid=uuidv4()
+            return new Supplier(uuid,name,cnpj,email,date_of_birth)
         }
 
-        private static createWithAddress( 
+        static createWithAddress( 
             name:string,
             cnpj:string,
             email:string,
@@ -19,7 +20,8 @@ export default class SupplierFactory{
             address:Address
             ):Supplier
             {
-                const supplier=new Supplier(uuid.v4(),name,cnpj,email,date_of_birth);
+                const uuid=uuidv4()
+                const supplier=new Supplier(uuid,name,cnpj,email,date_of_birth);
                 supplier.changeAddress(address)
                 return supplier
             }
