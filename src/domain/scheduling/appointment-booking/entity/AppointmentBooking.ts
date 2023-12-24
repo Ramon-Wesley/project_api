@@ -64,6 +64,10 @@ export default class AppointmentBooking extends Entity{
         return this.employee_id;
     }
 
+    get Customer_id(){
+        return this.customer_id
+    }
+
     get Animal_id(){
         return this.animal_id;
     }

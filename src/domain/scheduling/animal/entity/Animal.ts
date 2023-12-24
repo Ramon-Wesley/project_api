@@ -45,4 +45,24 @@ export default class Animal extends Entity{
     get Date_of_birth(){
         return this.date_of_birth
     }
+
+    changeCustomer_id(customer_id:string){
+        this.customer_id=customer_id;
+    }
+    
+    changeName(name:string){
+        this.name=name
+        this.validate()
+    }
+    changeWeight(weight:number){
+        this.weight=weight
+        this.validate()
+    }
+    changeRace_id(race_id:string){
+        this.race_id=race_id;
+    }
+    changeDate_of_birth(date_of_birth:Date){
+       this.date_of_birth=date_of_birth
+       this.validate()
+    }
 }
