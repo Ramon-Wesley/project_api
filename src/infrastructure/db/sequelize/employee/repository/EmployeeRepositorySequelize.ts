@@ -5,49 +5,55 @@ import Employee from "../../../../../domain/employee/entity/Employee";
 
 import AddressModel from "../../address/model/AddressModel";
 import EmployeeModel from "../model/EmployeeModel";
-import SequelizeFactory from "../../factory/Sequelize.factory";
-import { Sequelize } from "sequelize-typescript";
 import { EmployeeRepositoryInterface } from "../../../../../domain/employee/repository/Employee.repository.interface";
 
 export default class EmployeeRepositorySequelize implements EmployeeRepositoryInterface{
 
    
    async create(entity: Employee): Promise<void> {
- 
-    await  EmployeeModel.create({
-      id:entity.Id,
-      name:entity.Name,
-      ra:entity.Ra,
-      email:entity.Email,
-      date_of_birth:entity.Date_of_birth,
-      isActive:true,
-      address:{
-        uf:entity.Address?.Uf,
-        city:entity.Address?.City,
-        neighborhood:entity.Address?.Neighborhood,
-        zipCode:entity.Address?.ZipCode,
-        street:entity.Address?.Street,
-        number:entity.Address?.Number,
-        description:entity.Address?.Description,
-        entity_id: entity.Id,
-      }
-  }, {
-    include: [AddressModel]
-  })   
+ try {
+  
+   await  EmployeeModel.create({
+     id:entity.Id,
+     name:entity.Name,
+     ra:entity.Ra,
+     email:entity.Email,
+     date_of_birth:entity.Date_of_birth,
+     isActive:true,
+     address:{
+       uf:entity.Address?.Uf,
+       city:entity.Address?.City,
+       neighborhood:entity.Address?.Neighborhood,
+       zipCode:entity.Address?.ZipCode,
+       street:entity.Address?.Street,
+       number:entity.Address?.Number,
+       description:entity.Address?.Description,
+       entity_id: entity.Id,
+     }
+ }, {
+   include: [AddressModel]
+ })   
+ } catch (error) {
+  throw new Error("error creating employee record\n"+error)
+ }
     }
 
 
    async findById(id: string): Promise<Employee> {
-   
-      const result=await EmployeeModel.findOne({where:{id:id}, include: [{ model: AddressModel}]})
-        if(result){
-            const employee=new Employee(result.id,result.name,result.ra,result.email,result.date_of_birth)
-            const address=new Address(result.address.uf,result.address.city,result.address.neighborhood,
-            result.address.zipCode,result.address.street,result.address.number,result.address.description)
-            employee.changeAddress(address)
-            return employee
-        }
-        throw new Error("Employee not found!")
+   try {
+     const result=await EmployeeModel.findOne({where:{id:id}, include: [{ model: AddressModel}]})
+       if(result){
+           const employee=new Employee(result.id,result.name,result.ra,result.email,result.date_of_birth)
+           const address=new Address(result.address.uf,result.address.city,result.address.neighborhood,
+           result.address.zipCode,result.address.street,result.address.number,result.address.description)
+           employee.changeAddress(address)
+           return employee
+       }
+       throw new Error("Employee not found!")
+    
+   } catch (error) {
+    throw new Error("error when fetching employee record!\n"+error)
+   }
     } 
         
     
@@ -71,6 +77,8 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
 
     async findAll(sort: "desc" | "asc", filter: string, limit: number, page: number): Promise<RepositoryFindAllResult<Employee>> {
      
+      try {
+        
         let findAllEmployeeResult:Employee[]=[];
         const result= await EmployeeModel.findAndCountAll({
             where:{name:{[Op.like]:`%${filter}%`}},
@@ -96,15 +104,36 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
            };
            return findAllResult
           
-      
-    
-
-
+          } catch (error) {
+            throw new Error("error when fetching all employee record!\n"+error)
+          }
     }
 
     async deleteById(id: string): Promise<void> {
-
+      try {
         await EmployeeModel.destroy({where:{id:id}})
+      } catch (error) {
+        throw new Error("error when deleting employee record!\n"+error)
+      }
     }
 
+
+    async findByEmail(email:string): Promise<Employee> {
+
+      try {
+        const result= await EmployeeModel.findOne({where:{email:email},include:[AddressModel]})
+       
+        if(result){
+          const employee=new Employee(result.id,result.name,result.ra,result.email,result.date_of_birth)
+          const address=new Address(result.address.uf,result.address.city,result.address.neighborhood,
+          result.address.zipCode,result.address.street,result.address.number,result.address.description)
+          employee.changeAddress(address)
+          return employee
+      }
+      throw new Error("employee not found!!")
+  } catch (error) {
+    throw new Error("error when fetching employee with email record!\n"+error)
+  }
+    
+  }
 }

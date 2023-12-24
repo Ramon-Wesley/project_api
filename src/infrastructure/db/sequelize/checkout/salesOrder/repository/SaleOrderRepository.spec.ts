@@ -1,5 +1,4 @@
 
-import SequelizeFactory from "../../../factory/Sequelize.factory";
 import SupplierFactory from "../../../../../../domain/supplier/factory/SupplierFactory";
 import SupplierRepositorySequelize from "../../../supplier/repository/SupplierRepositorySequelize";
 import Address from "../../../../../../domain/@shared/object-value/address/Address";
@@ -17,6 +16,7 @@ import ProductRepositorySequelize from "../../products/repository/ProductReposit
 import SaleOrderRepositorySequelize from "./SaleOrderRepositorySequelize";
 import { Sequelize } from "sequelize-typescript";
 import { Op } from "sequelize";
+import SequelizeDb from "../../../config/SequelizeDB";
 
 
 describe("test the saleOrderReppository", () => {
@@ -24,7 +24,7 @@ describe("test the saleOrderReppository", () => {
 
       
    beforeEach(async()=>{ 
-        sequelize= await SequelizeFactory.execute();           
+    sequelize= await SequelizeDb.getInstance();               
  
      })
  

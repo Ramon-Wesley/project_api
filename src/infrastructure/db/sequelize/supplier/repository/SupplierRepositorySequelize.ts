@@ -5,8 +5,6 @@ import Supplier from "../../../../../domain/supplier/entity/Supplier";
 import SupplierRepositoryInterface from "../../../../../domain/supplier/repository/SupplierRepositoryInterface";
 import AddressModel from "../../address/model/AddressModel";
 import SupplierModel from "../model/SupplierModel";
-import SequelizeFactory from "../../factory/Sequelize.factory";
-import { Sequelize } from "sequelize-typescript";
 
 export default class SupplierRepositorySequelize implements SupplierRepositoryInterface{
 

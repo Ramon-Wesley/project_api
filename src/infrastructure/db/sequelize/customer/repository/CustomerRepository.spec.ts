@@ -6,8 +6,8 @@ import AddressModel from "../../address/model/AddressModel"
 
 import CustomerModel from "../model/CustomerModel"
 import CustomerRepositorySequelize from "./CustomerRepositorySequelize"
-import SequelizeFactory from "../../factory/Sequelize.factory"
 import { Sequelize } from "sequelize-typescript"
+import SequelizeDb from "../../config/SequelizeDB"
 
 
 
@@ -17,7 +17,7 @@ describe("Test the customer repository", ()=>{
 
       
    beforeEach(async()=>{ 
-        sequelize= await SequelizeFactory.execute();      
+    sequelize= await SequelizeDb.getInstance();       
  
      })
  
@@ -257,5 +257,6 @@ describe("Test the customer repository", ()=>{
         expect(customerDeleteResult).toBeNull()
         
 })
+
 
 })

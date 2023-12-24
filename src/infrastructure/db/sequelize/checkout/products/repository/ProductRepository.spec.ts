@@ -1,10 +1,10 @@
 import { Op } from "sequelize";
 import Product from "../../../../../../domain/checkout/products/entity/Product";
 import ProductFactory from "../../../../../../domain/checkout/products/factory/Product.factory";
-import SequelizeFactory from "../../../factory/Sequelize.factory";
 import ProductModel from "../model/ProductModel";
 import ProductRepository from "./ProductRepository";
 import { Sequelize } from "sequelize-typescript";
+import SequelizeDb from "../../../config/SequelizeDB";
 
 
 describe("Test the product repository", ()=>{
@@ -14,7 +14,7 @@ describe("Test the product repository", ()=>{
 
       
     beforeEach(async()=>{ 
-        sequelize= await SequelizeFactory.execute();          
+        sequelize= await SequelizeDb.getInstance();             
   
       })
   

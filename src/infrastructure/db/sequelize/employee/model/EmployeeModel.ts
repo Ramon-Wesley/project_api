@@ -15,10 +15,10 @@ export default class EmployeeModel extends Model{
     @Column({allowNull:false})
     declare name:string;
     
-    @Column({allowNull:false})
+    @Column({allowNull:false,unique:true})
     declare ra:string;
     
-    @Column({allowNull:false})
+    @Column({allowNull:false,unique:true})
     declare email:string;
     
     @Column({allowNull:false})

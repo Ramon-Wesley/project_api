@@ -6,8 +6,9 @@ import AddressModel from "../../address/model/AddressModel"
 
 import SupplierModel from "../model/SupplierModel"
 import SupplierRepositorySequelize from "./SupplierRepositorySequelize"
-import SequelizeFactory from "../../factory/Sequelize.factory"
+
 import { Sequelize } from "sequelize-typescript"
+import SequelizeDb from "../../config/SequelizeDB"
 
 
 
@@ -20,7 +21,7 @@ describe("Test the supplier repository", ()=>{
 
       
    beforeEach(async()=>{ 
-    sequelize= await SequelizeFactory.execute();      
+    sequelize= await SequelizeDb.getInstance();      
  
      })
  

@@ -3,12 +3,10 @@ import Address from "../../../../../domain/@shared/object-value/address/Address"
 import Employee from "../../../../../domain/employee/entity/Employee"
 import EmployeeFactory from "../../../../../domain/employee/factory/EmployeeFactory"
 import AddressModel from "../../address/model/AddressModel"
-
 import EmployeeModel from "../model/EmployeeModel"
-
-import SequelizeFactory from "../../factory/Sequelize.factory"
 import EmployeeRepositorySequelize from "./EmployeeRepositorySequelize"
 import { Sequelize } from "sequelize-typescript"
+import SequelizeDb from "../../config/SequelizeDB"
 
 
 
@@ -20,7 +18,7 @@ describe("Test the employee repository", ()=>{
 
       
   beforeEach(async()=>{ 
-    sequelize= await SequelizeFactory.execute();           
+    sequelize= await SequelizeDb.getInstance();             
 
     })
 
