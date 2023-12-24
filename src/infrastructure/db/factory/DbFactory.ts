@@ -1,15 +1,15 @@
 import { Sequelize } from 'sequelize-typescript';
-import SequelizeMemory from '../sequelize/config/SequelizeMemory';
-import SequelizeFactory from '../sequelize/factory/Sequelize.factory';
+import SequelizeDb from '../sequelize/config/SequelizeDB';
+
 
 export default class DbFactory{
     public static  execute(){
         switch (process.env.TYPE_ORM) {
             case "sequelize":
-                return SequelizeFactory.execute();
+                return SequelizeDb.getInstance();
                 break;
             default:
-                return SequelizeFactory.execute();
+                return SequelizeDb.getInstance();
                 break;
         }
     }
