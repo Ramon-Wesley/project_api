@@ -10,7 +10,9 @@ export default class ProductRepositorySequelize implements ProductRepositoryInte
             await ProductModel.create({
                 id:entity.Id,
                 name:entity.Name,
-                price:entity.Price
+                price:entity.Price,
+                quantity:entity.Quantity,
+                category_id:entity.Category_id
             })
         } catch (error) {
             throw new Error("error creating product record\n"+error)
@@ -22,7 +24,7 @@ export default class ProductRepositorySequelize implements ProductRepositoryInte
         try {
             const findResult=await ProductModel.findByPk(id);
             if(findResult){
-                const result=new Product(findResult.id,findResult.name,findResult.price)
+                const result=new Product(findResult.id,findResult.name,findResult.price,findResult.quantity,findResult.category_id)
                 return result
             }
             throw new Error("product not found!\n")
@@ -48,7 +50,7 @@ export default class ProductRepositorySequelize implements ProductRepositoryInte
            const totalPages = Math.ceil(totalElements / limit);
             let product:Product;
             result.rows.forEach((res)=>{
-                product=new Product(res.id,res.name,res.price)
+                product=new Product(res.id,res.name,res.price,res.quantity,res.category_id)
                 findAllProductResult.push(product)
             })
 

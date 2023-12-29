@@ -1,5 +1,8 @@
+import CategoryRepositorySequelize from "../checkout/products/category/repository/CategoryRepository";
+import ProductRepositorySequelize from "../checkout/products/repository/ProductRepository";
 import CustomerRepositorySequelize from "../customer/repository/CustomerRepositorySequelize";
 import EmployeeRepositorySequelize from "../employee/repository/EmployeeRepositorySequelize";
+import SupplierRepositorySequelize from "../supplier/repository/SupplierRepositorySequelize";
 
 export default class RepositoriesSequelizeFactory{
 
@@ -12,6 +15,19 @@ export default class RepositoriesSequelizeFactory{
     static employeeRepository(){
         return new EmployeeRepositorySequelize()
     }
+
+    static supplierRepository(){
+        return new SupplierRepositorySequelize()
+    }
+
+    static categoryRepository(){
+        return new CategoryRepositorySequelize()
+    }
+
+    static productRepository(){
+        return new ProductRepositorySequelize()
+    }
+
 }
 
 RepositoriesSequelizeFactory.customerRepository()

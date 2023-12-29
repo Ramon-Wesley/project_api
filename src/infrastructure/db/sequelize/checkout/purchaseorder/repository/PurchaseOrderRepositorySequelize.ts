@@ -135,7 +135,6 @@ export default class PurchaseOrderRepositorySequelize implements PurchaseOrderRe
           }
         })
       );
-
       await PurchaseOrderItemModel.bulkCreate(
         newItemsData.filter((newItem) => !purchaseOrder.items.some((item) => item.id === newItem.id)),
         { transaction }

@@ -53,23 +53,19 @@ export default class AppointmentBookingRepository implements AppointmentBookingR
        try {
         const appointment:AppointmentBooking[]=[]
         const result= await AppointmentBookingModel.findAndCountAll({
-            where: {
-                '$customer.name$': {
-                    [Op.like]: `%${filter}%`,
-                },
-              },
-            order:[["date",sort]],
+            order: [["date", sort], ["customer_id", sort]],
             limit:limit,
             offset:(page-1)*limit,
             include: [
+                
                 {
                   model: CustomerModel,
-                  as: 'customer', 
-                  attributes: ['name'], 
                 },
+
                 {
                     model:SchedulingServicesModel
                 }
+
               ],
           })
           
@@ -102,18 +98,28 @@ export default class AppointmentBookingRepository implements AppointmentBookingR
        const transaction: Transaction = await this.sequelize.transaction();
         try {
             const schedulingServicesIds=entity.SchedulingServices.map((res)=>res.Id) 
-          const appointment= await AppointmentBookingModel.findByPk(id,{include:[SchedulingServicesModel]})
+            const appointment= await AppointmentBookingModel.findByPk(id,{include:[SchedulingServicesModel]})
           
           if(appointment){
                const schedulingServicesIdsRemove=appointment?.schedulingServices.filter((res)=>!schedulingServicesIds.includes(res.id)).map((res)=>res.id)
-               await appointment.update({
-                    customer_id:entity.Customer_id,
-                    employee_id:entity.Employee_id,
-                    animal_id:entity.Animal_id,
-                    date:entity.Date,
-                    total:entity.Total
-                },{where:{id:id},transaction})
-
+              
+               const updatedFields: any = {
+                customer_id: entity.Customer_id,
+                employee_id: entity.Employee_id,
+                animal_id: entity.Animal_id,
+                date: entity.Date,
+                total: entity.Total
+              };
+              
+            
+              if (Object.values(updatedFields).some((value) => value !== undefined)) {
+            
+                
+                await appointment.update(updatedFields, { where: { id: id }, transaction });
+                
+                console.log('Atualização concluída com sucesso.');
+              }
+              
                 if (schedulingServicesIdsRemove.length > 0) {
                     await appointment.$remove("schedulingServices", schedulingServicesIdsRemove, { transaction });
                   }

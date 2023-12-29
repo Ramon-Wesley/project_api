@@ -8,7 +8,24 @@ import SupplierModel from "../model/SupplierModel";
 
 export default class SupplierRepositorySequelize implements SupplierRepositoryInterface{
 
-   
+  async findByEmail(email:string): Promise<Supplier> {
+
+    try {
+      const result= await SupplierModel.findOne({where:{email:email},include:[AddressModel]})
+     
+      if(result){
+        const supplier=new Supplier(result.id,result.name,result.cnpj,result.email,result.date_of_birth)
+        const address=new Address(result.address.uf,result.address.city,result.address.neighborhood,
+        result.address.zipCode,result.address.street,result.address.number,result.address.description)
+        supplier.changeAddress(address)
+        return supplier
+    }
+    throw new Error("supplier not found!!")
+} catch (error) {
+  throw new Error("error when fetching supplier with email record!\n"+error)
+}
+  
+}
    async create(entity: Supplier): Promise<void> {
   try {
     await  SupplierModel.create({

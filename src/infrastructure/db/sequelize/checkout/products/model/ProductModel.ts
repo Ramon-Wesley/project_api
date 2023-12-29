@@ -1,4 +1,5 @@
-import { Column, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import CategoryModel from '../category/model/CategoryModel';
 
 
 @Table({
@@ -16,4 +17,13 @@ export default class ProductModel extends Model{
 
     @Column({allowNull:false})
     declare price:number;
+
+    @Column({allowNull:false})
+    declare quantity:number;
+
+    @ForeignKey(()=>CategoryModel) 
+    declare category_id:string;
+
+    @BelongsTo(()=>CategoryModel)
+    declare category:CategoryModel;
 }

@@ -15,6 +15,7 @@ import AnimalModel from "../scheduling/animal/model/AnimalModel";
 import SchedulingServicesModel from "../scheduling/schedulingServices/model/SchedulingServicesModel";
 import AppointmentBookingModel from "../scheduling/appointment-booking/model/AppointmentBookingModel";
 import AppointmentBookingSchedulingService from "../scheduling/appointment-booking/model/AppointmentBookingSchedulingServiceModel";
+import CategoryModel from "../checkout/products/category/model/CategoryModel";
 
 export default class SequelizeDb{
     private static sequelize:Sequelize|undefined;
@@ -33,19 +34,17 @@ export default class SequelizeDb{
                     dialect: process.env.DB as Dialect || "sqlite",
                     port:Number(process.env.DB_PORT),
                     logging:false,
+                    models:[                        CustomerModel,AddressModel,
+                        SupplierModel,EmployeeModel,
+                        ProductModel,CategoryModel,
+                        PurchaseOrderModel,PurchaseOrderItemModel,
+                        SaleOrderModel,SaleOrderItemModel,
+                        RaceModel,AnimalModel,
+                        SchedulingServicesModel,AppointmentBookingModel,AppointmentBookingSchedulingService]
                 })
-                SequelizeDb.sequelize.addModels([
-                    CustomerModel,AddressModel,
-                    SupplierModel,EmployeeModel,
-                    ProductModel,PurchaseOrderModel,
-                    PurchaseOrderItemModel,
-                    SaleOrderModel,SaleOrderItemModel,
-                    RaceModel,AnimalModel,
-                    SchedulingServicesModel,AppointmentBookingModel,AppointmentBookingSchedulingService
-                ])
-               
-                return await SequelizeDb.sequelize.sync();
-                
+          
+               return await SequelizeDb.sequelize.sync();
+                             
         } catch (error) {
             
             throw new Error(`error when connecting to ${process.env.DB} database!`+error)

@@ -17,6 +17,8 @@ import PurchaseOrderRepositorySequelize from "./PurchaseOrderRepositorySequelize
 import { Sequelize } from "sequelize-typescript";
 import { Op } from "sequelize";
 import SequelizeDb from "../../../config/SequelizeDB";
+import CategoryFactory from "../../../../../../domain/checkout/products/category/factory/CategoryFactory";
+import CategoryModel from "../../products/category/model/CategoryModel";
 
 
 describe("test the purchaseOrderReppository", () => {
@@ -49,7 +51,9 @@ describe("test the purchaseOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
         const purchaseOrderRepository= new PurchaseOrderRepositorySequelize(sequelize);
@@ -88,7 +92,9 @@ describe("test the purchaseOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
  
       
@@ -101,7 +107,7 @@ describe("test the purchaseOrderReppository", () => {
         
         const purchaseOrderModel=await PurchaseOrderModel.findOne({where:{id:purchaseOrder.Id},include:[{model:PurchaseOrderItemModel}]})
       
-        const product2=ProductFactory.create("product2",200);
+        const product2=ProductFactory.create("product2",200,10,category.Id);
         await productRepository.create(product2);
 
         const purchaseOrderItem2=PurchaseOrderItemFactory.create(product2.Id,20,product2.Price)
@@ -143,7 +149,9 @@ describe("test the purchaseOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
         const purchaseOrderRepository= new PurchaseOrderRepositorySequelize(sequelize);
@@ -181,7 +189,9 @@ describe("test the purchaseOrderReppository", () => {
         await employeeRepository.create(employee);
       
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
         const purchaseOrderRepository= new PurchaseOrderRepositorySequelize(sequelize);
@@ -250,7 +260,9 @@ describe("test the purchaseOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
         const purchaseOrderRepository= new PurchaseOrderRepositorySequelize(sequelize);

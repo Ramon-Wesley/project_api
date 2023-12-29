@@ -17,6 +17,9 @@ import SaleOrderRepositorySequelize from "./SaleOrderRepositorySequelize";
 import { Sequelize } from "sequelize-typescript";
 import { Op } from "sequelize";
 import SequelizeDb from "../../../config/SequelizeDB";
+import CategoryFactory from "../../../../../../domain/checkout/products/category/factory/CategoryFactory";
+import Product from "../../../../../../domain/checkout/products/entity/Product";
+import CategoryModel from "../../products/category/model/CategoryModel";
 
 
 describe("test the saleOrderReppository", () => {
@@ -49,11 +52,23 @@ describe("test the saleOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
-        await productRepository.create(product);
+        const product={
+            id:"123",
+            name:"product1",
+            quantity:3,
+            price:100
+        }
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({
+            id:category.Id,
+            name:category.Name,
+            description:category.Description
+        })
+        const result=new Product(product.id,product.name,product.price,product.quantity,category.Id);
+        await productRepository.create(result);
     
         const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
-        const saleOrderItem=SaleOrderItemFactory.create(product.Id,10,product.Price)
+        const saleOrderItem=SaleOrderItemFactory.create(result.Id,10,result.Price)
         const saleOrder=SaleOrderFactory.create(supplier.Id,employee.Id,[saleOrderItem]);
         
         await saleOrderRepository.create(saleOrder);
@@ -66,7 +81,7 @@ describe("test the saleOrderReppository", () => {
         expect(saleOrderModel?.employee_id).toBe(employeeModel?.id)
         expect(saleOrderModel?.items.length).toBe(1)
         expect(saleOrderModel?.items[0].id).toBe(saleOrderItem.Id)
-        expect(saleOrderModel?.items[0].product_id).toBe(product.Id)
+        expect(saleOrderModel?.items[0].product_id).toBe(result.Id)
         expect(saleOrderModel?.items[0].quantity).toBe(saleOrderItem.Quantity)
         expect(saleOrderModel?.items[0].total).toBe(saleOrderItem.Total)     
     })
@@ -88,7 +103,9 @@ describe("test the saleOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
  
       
@@ -101,7 +118,7 @@ describe("test the saleOrderReppository", () => {
         
         const saleOrderModel=await SaleOrderModel.findOne({where:{id:saleOrder.Id},include:[{model:SaleOrderItemModel}]})
       
-        const product2=ProductFactory.create("product2",200);
+        const product2=ProductFactory.create("product2",200,10,category.Id);
         await productRepository.create(product2);
 
         const saleOrderItem2=SaleOrderItemFactory.create(product2.Id,20,product2.Price)
@@ -143,7 +160,9 @@ describe("test the saleOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
         const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
@@ -181,7 +200,9 @@ describe("test the saleOrderReppository", () => {
         await employeeRepository.create(employee);
       
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
         const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
@@ -250,7 +271,9 @@ describe("test the saleOrderReppository", () => {
         const employeeModel=await EmployeeModel.findOne({where:{id:employee.Id}, include: [{ model: AddressModel}]})
 
         const productRepository = new ProductRepositorySequelize();
-        const product=ProductFactory.create("product1",100);
+        const category=CategoryFactory.create("category1","category1 description")
+        await CategoryModel.create({id:category.Id,name:category.Name,description:category.Description})
+        const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
         const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);

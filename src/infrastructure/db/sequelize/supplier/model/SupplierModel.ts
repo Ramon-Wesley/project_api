@@ -15,10 +15,10 @@ export default class SupplierModel extends Model{
     @Column({allowNull:false})
     declare name:string;
     
-    @Column({allowNull:false})
+    @Column({allowNull:false,unique:true})
     declare cnpj:string;
     
-    @Column({allowNull:false})
+    @Column({allowNull:false,unique:true})
     declare email:string;
     
     @Column({allowNull:false})

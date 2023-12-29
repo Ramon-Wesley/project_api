@@ -31,7 +31,7 @@ describe("Test the scheduling services repository", ()=>{
        })
 
 
-       it("save schedulingService data correctly",async ()=>{
+       it("save appointmentBooking data correctly",async ()=>{
         const customerRepository= new CustomerRepositorySequelize();
         const address=new Address("MG","city1","bairro","35170-300","ruab","123")
         const customer=CustomerFactory.createWithAddress("customer1","533.408.010-45",
@@ -63,7 +63,7 @@ describe("Test the scheduling services repository", ()=>{
         const appointment=AppointmentBookingFactory.create(customer.Id,employee.Id,animal.Id,date,[schedulingService])
         await appointmentBookingRepository.create(appointment);
         const result=await AppointmentBookingModel.findByPk(appointment.Id,{include:[SchedulingServicesModel]})
-
+      
         expect(result?.id).toBe(appointment.Id)
         expect(result?.customer_id).toBe(customer.Id)
         expect(result?.employee_id).toBe(employee.Id)
@@ -109,9 +109,11 @@ describe("Test the scheduling services repository", ()=>{
         const appointmentBookingRepository=new AppointmentBookingRepository(sequelize);
         const appointment=AppointmentBookingFactory.create(customer.Id,employee.Id,animal.Id,date,[schedulingService])
         await appointmentBookingRepository.create(appointment);
+
         const date2=new Date()
         appointment.changeDate(date2)
         appointment.changeSchedulingServices([schedulingService2])
+       
         await appointmentBookingRepository.updateById(appointment.Id,appointment)
         const result=await AppointmentBookingModel.findByPk(appointment.Id,{include:[SchedulingServicesModel]})
 
@@ -123,12 +125,7 @@ describe("Test the scheduling services repository", ()=>{
         expect(result?.schedulingServices.length).toBe(1)
         expect(result?.schedulingServices[0].id).toBe(schedulingService2.Id)
         expect(result?.schedulingServices[0].name).toBe(schedulingService2.Name)
-        expect(result?.schedulingServices[0].price).toBe(schedulingService2.Price)
-
-
-
-
-       
+        expect(result?.schedulingServices[0].price).toBe(schedulingService2.Price)       
     })
     
    
