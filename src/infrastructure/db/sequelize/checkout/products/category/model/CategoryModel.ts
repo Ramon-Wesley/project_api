@@ -10,7 +10,7 @@ export default class CategoryModel extends Model{
     @Column
     declare id:string;
 
-    @Column({allowNull:false})
+    @Column({allowNull:false,unique:true})
     declare name:string;
 
     @Column({allowNull:false})
