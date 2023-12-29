@@ -1,14 +1,10 @@
 import { Router } from "express";
 import customerRouterApp from "./customer/Customer.index";
 import employeeRouterApp from "./employee/Employee.index";
-import supplierRouterApp from "./supplier/Supplier.index";
-import categoryRouterApp from "./category/Category.index";
-import productRouterApp from "./product/Product.index";
 
-export const router: Router[] =  [
+const result: Router[] = [
     customerRouterApp,
-    employeeRouterApp,
-    supplierRouterApp,
-    categoryRouterApp,
-    productRouterApp
-];;
+    employeeRouterApp
+];
+
+export const router: Router[] = result;
