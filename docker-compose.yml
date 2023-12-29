@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  node:
+    container_name: appnode
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/app
+    networks:
+      - nodeNetwork
+
+  postgres:
+    image: postgres:latest
+    container_name: db_postgres
+    restart: always
+    tty: true
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: databaseapi
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./db_date:/var/lib/postgresql/data
+    networks:
+      - nodeNetwork
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080  
+    networks:
+      - nodeNetwork  
+
+
+networks:
+  nodeNetwork:
+    driver: bridge
+    
+

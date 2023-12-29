@@ -66,7 +66,7 @@ describe("test the employee entity",()=>{
               employee.email,
               employee.date_of_birth
             );
-          }).toThrow("employee: Invalid RA!,employee: Invalid Email!");
+          }).toThrow("employee: Invalid RA! Ra must have exactly 8 characters,employee: Invalid Email!");
         
         
     })
