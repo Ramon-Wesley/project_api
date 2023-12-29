@@ -5,17 +5,17 @@ import {StatusCodes} from "http-status-codes";
 import { Sequelize } from "sequelize-typescript";
 import SequelizeDb from "../../../../db/sequelize/config/SequelizeDB";
 import RepositoryFindAllResult from "../../../../../domain/@shared/repository/RepositoryFindAllResult";
-import FindAllCustomerOutDto from "../../../../../use-case/customer/findAll/FindAllCustomerOutDto";
-describe("E2E test find all customer",()=>{
+import FindAllSupplierOutDto from "../../../../../use-case/supplier/findAll/FindAllSupplierOutDto";
+describe("E2E test find all supplier",()=>{
  
 
-     it("find all customer",async()=>{
+     it("find all supplier",async()=>{
      const app=await ExpressConfig.execute()
-     await request(app).post("/customer")
+     await request(app).post("/supplier")
         .send({
-            name:"customer123",
-            cpf:"640.819.000-60",
-            email:"customer@hotmail.com",
+            name:"supplier123",
+            cnpj:"78.648.434/0001-90",
+            email:"supplier@hotmail.com",
             date_of_birth:new Date(),
             address:{
             uf:"mg",
@@ -28,11 +28,11 @@ describe("E2E test find all customer",()=>{
         },
         isActive:true
 })
-await request(app).post("/customer")
+await request(app).post("/supplier")
 .send({
-    name:"customer1234",
-    cpf:"963.055.990-09",
-    email:"customer2@hotmail.com",
+    name:"supplier123",
+    cnpj:"56.336.125/0001-41",
+    email:"supplier2@hotmail.com",
     date_of_birth:new Date(),
     address:{
     uf:"mg",
@@ -46,8 +46,8 @@ await request(app).post("/customer")
 isActive:true
 })
 
-     const response=await request(app).get("/customer")
-     const entity=response.body as FindAllCustomerOutDto
+     const response=await request(app).get("/supplier")
+     const entity=response.body as FindAllSupplierOutDto
      expect(response.status).toBe(StatusCodes.OK)
      expect(response.body).toBeDefined()
      expect(entity.entity.length).toBe(2)
@@ -55,11 +55,11 @@ isActive:true
 
      })
 
-     it("find all customer not exists customers",async()=>{
+     it("find all supplier not exists suppliers",async()=>{
         const app=await ExpressConfig.execute()
 
-        const response=await request(app).get("/customer")
-        const entity=response.body as FindAllCustomerOutDto
+        const response=await request(app).get("/supplier")
+        const entity=response.body as FindAllSupplierOutDto
         expect(response.status).toBe(StatusCodes.OK)
         expect(response.body).toBeDefined()
         expect(entity.entity.length).toBe(0)
