@@ -75,8 +75,9 @@ describe("Test the scheduling services repository", ()=>{
         expect(result?.schedulingServices[0].price).toBe(schedulingService.Price)
 
     })
- 
+    
     it("update appointmentBooking data correctly",async ()=>{
+      
         const customerRepository= new CustomerRepositorySequelize();
         const address=new Address("MG","city1","bairro","35170-300","ruab","123")
         const customer=CustomerFactory.createWithAddress("customer1","533.408.010-45",
@@ -104,8 +105,7 @@ describe("Test the scheduling services repository", ()=>{
         await animalRepository.create(animal)
         await schedulingServiceRepository.create(schedulingService);
         await schedulingServiceRepository.create(schedulingService2);
-
-   
+  
         const appointmentBookingRepository=new AppointmentBookingRepository(sequelize);
         const appointment=AppointmentBookingFactory.create(customer.Id,employee.Id,animal.Id,date,[schedulingService])
         await appointmentBookingRepository.create(appointment);

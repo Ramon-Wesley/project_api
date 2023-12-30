@@ -1,5 +1,5 @@
-import { Op, Transaction, where } from 'sequelize';
-import { Model, Sequelize } from "sequelize-typescript";
+import { Transaction } from 'sequelize';
+import { Sequelize } from "sequelize-typescript";
 import AppointmentBookingRepositoryInterface from "../../../../../../domain/scheduling/appointment-booking/repository/AppointmentBookingInterface.repository";
 import RepositoryFindAllResult from "../../../../../../domain/@shared/repository/RepositoryFindAllResult";
 import AppointmentBooking from "../../../../../../domain/scheduling/appointment-booking/entity/AppointmentBooking";
@@ -95,7 +95,9 @@ export default class AppointmentBookingRepository implements AppointmentBookingR
     }
 
    async updateById(id: string, entity: AppointmentBooking): Promise<void> {
+      
        const transaction: Transaction = await this.sequelize.transaction();
+
         try {
             const schedulingServicesIds=entity.SchedulingServices.map((res)=>res.Id) 
             const appointment= await AppointmentBookingModel.findByPk(id,{include:[SchedulingServicesModel]})
@@ -113,11 +115,7 @@ export default class AppointmentBookingRepository implements AppointmentBookingR
               
             
               if (Object.values(updatedFields).some((value) => value !== undefined)) {
-            
-                
                 await appointment.update(updatedFields, { where: { id: id }, transaction });
-                
-                console.log('Atualização concluída com sucesso.');
               }
               
                 if (schedulingServicesIdsRemove.length > 0) {

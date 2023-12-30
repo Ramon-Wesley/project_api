@@ -77,7 +77,9 @@ export default class ProductRepositorySequelize implements ProductRepositoryInte
         try {
             await ProductModel.update({
                 name:entity.Name,
-                price:entity.Price
+                price:entity.Price,
+                quantity:entity.Quantity,
+                category_id:entity.Category_id
             },{where:{id:id}})       
         } catch (error) {
             throw new Error("error update product record\n"+error)

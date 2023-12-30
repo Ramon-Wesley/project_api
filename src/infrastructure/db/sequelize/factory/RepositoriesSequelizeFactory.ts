@@ -28,6 +28,8 @@ export default class RepositoriesSequelizeFactory{
         return new ProductRepositorySequelize()
     }
 
+   
+
 }
 
 RepositoriesSequelizeFactory.customerRepository()

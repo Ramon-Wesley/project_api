@@ -1,5 +1,5 @@
 import {Sequelize} from "sequelize-typescript"
-import dotenv from "dotenv"
+import {config} from "dotenv"
 import AddressModel from "../address/model/AddressModel"
 import CustomerModel from "../customer/model/CustomerModel"
 import SupplierModel from "../supplier/model/SupplierModel";
@@ -24,26 +24,27 @@ export default class SequelizeDb{
 
     public static async getInstance():Promise<Sequelize>{
         try {
-
+            config()
                 SequelizeDb.sequelize=new Sequelize({
                     database:process.env.DB_NAME,
                     username:process.env.DB_USERNAME,
                     password:process.env.DB_PASSWORD,
-                    storage:process.env.DB === "sqlite"?":memory:":"",
+                    storage:process.env.DB_STORAGE,
                     host:process.env.DB_HOST,
-                    dialect: process.env.DB as Dialect || "sqlite",
+                    dialect: process.env.DB as Dialect,
                     port:Number(process.env.DB_PORT),
                     logging:false,
-                    models:[                        CustomerModel,AddressModel,
+                    models:[                        
+                        CustomerModel,AddressModel,
                         SupplierModel,EmployeeModel,
                         ProductModel,CategoryModel,
                         PurchaseOrderModel,PurchaseOrderItemModel,
                         SaleOrderModel,SaleOrderItemModel,
                         RaceModel,AnimalModel,
-                        SchedulingServicesModel,AppointmentBookingModel,AppointmentBookingSchedulingService]
+                        SchedulingServicesModel,AppointmentBookingModel,AppointmentBookingSchedulingService],
                 })
           
-               return await SequelizeDb.sequelize.sync();
+                return await SequelizeDb.sequelize.sync();
                              
         } catch (error) {
             
