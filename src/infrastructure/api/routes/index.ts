@@ -3,12 +3,14 @@ import customerRouterApp from "./customer/Customer.index";
 import employeeRouterApp from "./employee/Employee.index";
 import categoryRouterApp from "./checkout/product/category/Category.index";
 import productRouterApp from "./checkout/product/Product.index";
+import supplierRouterApp from "./supplier/Supplier.index";
 
-const result: Router[] = [
+
+
+export const router: Router[] = [
     customerRouterApp,
     employeeRouterApp,
     categoryRouterApp,
-    productRouterApp
-];
-
-export const router: Router[] = result;
+    productRouterApp,
+    supplierRouterApp
+]

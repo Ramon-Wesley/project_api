@@ -31,7 +31,7 @@ describe("E2E test find all customer",()=>{
 await request(app).post("/customer")
 .send({
     name:"customer123",
-    cpf:"640.819.000-60",
+    cpf:"687.970.570-70",
     email:"customer2@hotmail.com",
     date_of_birth:new Date(),
     address:{
