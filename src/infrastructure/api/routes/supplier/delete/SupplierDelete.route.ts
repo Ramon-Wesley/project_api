@@ -8,7 +8,7 @@ export default class SupplierRouterDelete{
 
 
     async execute(req:Request<DeleteSupplierInDto>,res:Response){
-        const supplierRepository=DbFactoryRepositories.execute().supplierRepository()
+        const supplierRepository=DbFactoryRepositories.supplierRepository()
         const usecase= new DeleteSupplierUseCase(supplierRepository)
         try {
             const request=req.params

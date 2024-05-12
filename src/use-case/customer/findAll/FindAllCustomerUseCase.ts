@@ -1,4 +1,5 @@
 import CustomerRepositoryInterface from "../../../domain/customer/repository/CustomerRepositoryInterface";
+import CacheFactory from "../../../infrastructure/cache/factory/CacheFactory";
 import useCaseInterface from "../../@shared/UseCaseInterface";
 import FindAllCustomerInDto from "./FindAllCustomerInDto";
 import FindAllCustomerOutDto from "./FindAllCustomerOutDto";
@@ -12,10 +13,19 @@ export default class FindAllCustomerUseCase implements useCaseInterface<FindAllC
 
     async execute(input: FindAllCustomerInDto): Promise<FindAllCustomerOutDto> {
         try {
-           
+            const cache=CacheFactory.execute()
+            let findResult:FindAllCustomerOutDto;
+            const queryValues=Object.values(input).join(",")
+            let keyCache:string="customer: "+queryValues;
+            const client=await cache.getValue(keyCache)
+              if(client){
+                findResult=JSON.parse(client) as FindAllCustomerOutDto
+                return findResult
+                }
+              
           const result=await this.customerRepository.findAll(input.sort,input.filter,input.limit,input.page);  
-          console.log(result)
-          const findResult:FindAllCustomerOutDto={
+    
+           findResult={
               entity: result.entity.map((res) =>{return{
                 id:res.Id,
                 name:res.Name,
@@ -38,11 +48,11 @@ export default class FindAllCustomerUseCase implements useCaseInterface<FindAllC
             number_of_elements:result.number_of_elements,
             total_page:result.total_page
         }
-   
+    
+          await cache.insertValue(keyCache,JSON.stringify(findResult))
           return findResult;
         } catch (error) {
-            const err= error as Error;
-            throw new Error(err.message)
+            throw error
         }
     }
 }

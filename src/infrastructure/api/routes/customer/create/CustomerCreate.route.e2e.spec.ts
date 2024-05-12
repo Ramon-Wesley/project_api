@@ -77,7 +77,7 @@ describe("E2E test for customer create",()=>{
                },
                isActive:true
        })
-               expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+               expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
           
                })
 

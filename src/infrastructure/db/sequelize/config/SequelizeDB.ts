@@ -31,7 +31,7 @@ export default class SequelizeDb{
                     password:process.env.DB_PASSWORD,
                     storage:process.env.DB_STORAGE,
                     host:process.env.DB_HOST,
-                    dialect: process.env.DB as Dialect,
+                    dialect:process.env.DB as Dialect,
                     port:Number(process.env.DB_PORT),
                     logging:false,
                     models:[                        

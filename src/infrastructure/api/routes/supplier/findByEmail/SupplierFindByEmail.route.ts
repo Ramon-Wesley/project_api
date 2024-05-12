@@ -9,7 +9,7 @@ export default class SupplierRouterFindByEmail{
 
     async execute(req:Request<{},{},FindByEmailSupplierInDto>,res:Response){
 
-        const supplierRepository=DbFactoryRepositories.execute().supplierRepository()
+        const supplierRepository=DbFactoryRepositories.supplierRepository()
         const usecase= new FindByEmailSupplierUseCase(supplierRepository)
         try {
             const request=req.body

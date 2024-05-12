@@ -11,15 +11,12 @@ export default class DeleteCustomerUseCase implements useCaseInterface<DeleteCus
     
    async execute(input: DeleteCustomerInDto): Promise<void> {
         try {
-            const findCustomer=await this.customerRepository.findById(input.id)
-            if(findCustomer){
-                await this.customerRepository.deleteById(input.id);
-            }else{
-                throw new Error("Customer not found!");
-            }
+            await this.customerRepository.findById(input.id)
+            
+            await this.customerRepository.deleteById(input.id);
+           
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);    
+            throw error  
         }
     }
 

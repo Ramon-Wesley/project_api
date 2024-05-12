@@ -9,7 +9,7 @@ export default class EmployeeRouterUpdate{
 
 
     async execute(req:Request<{},{},UpdateEmployeeInDto>,res:Response){
-        const employeeRepository=DbFactoryRepositories.execute().employeeRepository()
+        const employeeRepository=DbFactoryRepositories.employeeRepository()
         const usecase= new UpdateEmployeeUseCase(employeeRepository)
         try {
             const request=req.body

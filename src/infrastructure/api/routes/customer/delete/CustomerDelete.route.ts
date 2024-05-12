@@ -13,7 +13,7 @@ export default class CustomerRouterDelete{
 
 
     async execute(req:Request<DeleteCustomerInDto>,res:Response){
-        const customerRepository=DbFactoryRepositories.execute().customerRepository()
+        const customerRepository=DbFactoryRepositories.customerRepository()
         const usecase= new DeleteCustomerUseCase(customerRepository)
         try {
             const request=req.params

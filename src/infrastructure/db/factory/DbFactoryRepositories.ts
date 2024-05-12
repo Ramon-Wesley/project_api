@@ -2,7 +2,7 @@ import RepositoriesSequelizeFactory from "../sequelize/factory/RepositoriesSeque
 
 export default class DbFactoryRepositories{
 
-    public static  execute(){
+    private static  execute(){
         switch (process.env.TYPE_ORM) {
             case "sequelize":
                 return RepositoriesSequelizeFactory;
@@ -12,4 +12,25 @@ export default class DbFactoryRepositories{
                 break;
         }
     }
+
+    static customerRepository(){
+        return DbFactoryRepositories.execute().customerRepository()
+    }
+    
+    static employeeRepository(){
+        return DbFactoryRepositories.execute().employeeRepository()
+    }
+
+    static supplierRepository(){
+        return DbFactoryRepositories.execute().supplierRepository()
+    }
+
+    static categoryRepository(){
+        return DbFactoryRepositories.execute().categoryRepository()
+    }
+
+    static productRepository(){
+        return DbFactoryRepositories.execute().productRepository()
+    }
+
 }

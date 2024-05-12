@@ -9,7 +9,7 @@ export default class SupplierRouterFind{
 
 
     async execute(req:Request<FindSupplierINDto>,res:Response){
-        const supplierRepository=DbFactoryRepositories.execute().supplierRepository()
+        const supplierRepository=DbFactoryRepositories.supplierRepository()
 
         const usecase= new FindSupplierUseCase(supplierRepository)
         try {

@@ -5,6 +5,7 @@ import CustomerRepositorySequelize from "../../../../db/sequelize/customer/repos
 import {StatusCodes} from "http-status-codes"
 import FindAllCustomerInDto from "../../../../../use-case/customer/findAll/FindAllCustomerInDto";
 import FindAllCustomerUseCase from "../../../../../use-case/customer/findAll/FindAllCustomerUseCase";
+import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
 
 
 export default class CustomerRouterFindAll{
@@ -12,7 +13,9 @@ export default class CustomerRouterFindAll{
 
     async execute(req:Request<{},{},{},FindAllCustomerInDto>,res:Response){
         
-        const usecase= new FindAllCustomerUseCase(new CustomerRepositorySequelize())
+        const customerRepository=DbFactoryRepositories.customerRepository()
+
+        const usecase= new FindAllCustomerUseCase(customerRepository)
         
         try {
             const request:FindAllCustomerInDto={

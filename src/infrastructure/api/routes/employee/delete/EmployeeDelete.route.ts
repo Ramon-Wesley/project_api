@@ -8,7 +8,7 @@ export default class EmployeeRouterDelete{
 
 
     async execute(req:Request<DeleteEmployeeInDto>,res:Response){
-        const employeeRepository=DbFactoryRepositories.execute().employeeRepository()
+        const employeeRepository=DbFactoryRepositories.employeeRepository()
         const usecase= new DeleteEmployeeUseCase(employeeRepository)
         try {
             const request=req.params

@@ -9,7 +9,7 @@ export default class EmployeeRouterFindByEmail{
 
     async execute(req:Request<{},{},FindByEmailEmployeeInDto>,res:Response){
 
-        const employeeRepository=DbFactoryRepositories.execute().employeeRepository()
+        const employeeRepository=DbFactoryRepositories.employeeRepository()
         const usecase= new FindByEmailEmployeeUseCase(employeeRepository)
         try {
             const request=req.body

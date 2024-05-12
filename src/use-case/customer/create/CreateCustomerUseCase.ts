@@ -1,3 +1,4 @@
+import NotificationError from "../../../domain/@shared/notification/NotificationError";
 import Address from "../../../domain/@shared/object-value/address/Address";
 import CustomerFactory from "../../../domain/customer/factory/CustomerFactory";
 import CustomerRepositoryInterface from "../../../domain/customer/repository/CustomerRepositoryInterface";
@@ -22,8 +23,7 @@ export default class CreateCustomerUseCase implements useCaseInterface<CreateCus
             } 
             await this.customerRepository.create(customer)   
         } catch (error) {
-            const err=error as Error
-            throw new Error(err.message)
+            throw error
         }
     }
 

@@ -86,4 +86,30 @@ export default class ProductRepositorySequelize implements ProductRepositoryInte
         }
 }
 
+    async findByIds(ids:string[]):Promise<Product[]>{
+        try {
+    
+            const products=await ProductModel.findAll({
+                where:{
+                    id:{
+                        [Op.in]: ids
+                    }
+        }
+    })
+    
+    let findAllProductResult:Product[]=[];
+    
+    if(products.length>0){
+        let product;
+       products.forEach((res)=>{
+            product=new Product(res.id,res.name,res.price,res.quantity,res.category_id)
+            findAllProductResult.push(product)
+        })
+    }
+    return findAllProductResult
+
+        } catch (error) {
+            throw error
+        }
+    }
 }

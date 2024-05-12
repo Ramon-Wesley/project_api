@@ -1,7 +1,8 @@
 import request, { CallbackHandler } from "supertest";
 import ExpressConfig from "../../../express/express";
 import {StatusCodes} from "http-status-codes";
-import UpdateCustomerOutDto from "../../../../../use-case/customer/update/UpdateCustomerOUtDto";
+import UpdateCustomerInDto from "../../../../../use-case/customer/update/UpdateCustomerInDto";
+
 describe("E2E test update by id customer",()=>{
  
 
@@ -30,7 +31,7 @@ const findResponse=await request(app).post("/customer/find/email")
  email:"customer@hotmail.com"
 })
 
-const result =findResponse.body as UpdateCustomerOutDto;
+const result =findResponse.body as UpdateCustomerInDto;
 result.name="customer1234"
 
   const response=await request(app).put(`/customer/${result.id}`)

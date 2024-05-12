@@ -1,4 +1,5 @@
 import { EmployeeRepositoryInterface } from "../../../domain/employee/repository/Employee.repository.interface";
+import CacheFactory from "../../../infrastructure/cache/factory/CacheFactory";
 import useCaseInterface from "../../@shared/UseCaseInterface";
 
 import FindByEmailEmployeeInDto from "./FindByEmailEmployeeInDto";
@@ -14,6 +15,17 @@ export default class FindByEmailEmployeeUseCase implements useCaseInterface<Find
 
     async execute(input: FindByEmailEmployeeInDto): Promise<FindByEmailEmployeeOutDto> {
         try {
+            const cache=CacheFactory.execute()
+            let findResult:FindByEmailEmployeeOutDto;
+            let key=input.email
+            
+              const client=await cache.getValue(key)
+              
+              if(client){
+                findResult=JSON.parse(client) as FindByEmailEmployeeOutDto
+                return findResult
+                }
+                
             const result=await this.employeeRepository.findByEmail(input.email);
             if(result && result.Address){
                 const findResult:FindByEmailEmployeeOutDto={ 
@@ -34,6 +46,7 @@ export default class FindByEmailEmployeeUseCase implements useCaseInterface<Find
                 }
                 
             }
+            await cache.insertValue(key,JSON.stringify(findResult))
             return findResult;
             }
             throw new Error("employee not found!")

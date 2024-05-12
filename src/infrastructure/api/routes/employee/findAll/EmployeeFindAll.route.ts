@@ -5,14 +5,17 @@ import EmployeeRepositorySequelize from "../../../../db/sequelize/employee/repos
 import {StatusCodes} from "http-status-codes"
 import FindAllEmployeeInDto from "../../../../../use-case/employee/findAll/FindAllEmployeeInDto";
 import FindAllEmployeeUseCase from "../../../../../use-case/employee/findAll/FindAllEmployeeUseCase";
+import DbFactory from "../../../../db/factory/DbFactory";
+import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
 
 
 export default class EmployeeRouterFindAll{
 
 
     async execute(req:Request<{},{},{},FindAllEmployeeInDto>,res:Response){
+        const employeeRepository=DbFactoryRepositories.employeeRepository()
         
-        const usecase= new FindAllEmployeeUseCase(new EmployeeRepositorySequelize())
+        const usecase= new FindAllEmployeeUseCase(employeeRepository)
         
         try {
             const request:FindAllEmployeeInDto={

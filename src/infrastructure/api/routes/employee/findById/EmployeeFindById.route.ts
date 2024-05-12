@@ -8,7 +8,7 @@ export default class EmployeeRouterFind{
 
 
     async execute(req:Request<FindEmployeeINDto>,res:Response){
-        const employeeRepository=DbFactoryRepositories.execute().employeeRepository()
+        const employeeRepository=DbFactoryRepositories.employeeRepository()
 
         const usecase= new FindEmployeeUseCase(employeeRepository)
         try {

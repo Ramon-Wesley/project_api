@@ -11,7 +11,7 @@ export default class CustomerRouterFind{
 
 
     async execute(req:Request<FindCustomerINDto>,res:Response){
-        const customerRepository=DbFactoryRepositories.execute().customerRepository()
+        const customerRepository=DbFactoryRepositories.customerRepository()
 
         const usecase= new FindCustomerUseCase(customerRepository)
         try {

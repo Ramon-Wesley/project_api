@@ -11,7 +11,7 @@ export default class CustomerRouterFindByEmail{
 
     async execute(req:Request<{},{},FindByEmailCustomerInDto>,res:Response){
 
-        const customerRepository=DbFactoryRepositories.execute().customerRepository()
+        const customerRepository=DbFactoryRepositories.customerRepository()
         const usecase= new FindByEmailCustomerUseCase(customerRepository)
         try {
             const request=req.body

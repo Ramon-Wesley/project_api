@@ -7,7 +7,7 @@ import CreateSupplierUseCase from "../../../../../use-case/supplier/create/Creat
 
 export default class SupplierRouterCreate{
     async execute(req:Request<{},{},CreateSupplierInDto>,res:Response){
-        const supplierRepository=DbFactoryRepositories.execute().supplierRepository()
+        const supplierRepository=DbFactoryRepositories.supplierRepository()
         const usecase= new CreateSupplierUseCase(supplierRepository)
         
         try {

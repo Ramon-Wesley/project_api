@@ -1,5 +1,6 @@
 
 import { EmployeeRepositoryInterface } from "../../../domain/employee/repository/Employee.repository.interface";
+import CacheFactory from "../../../infrastructure/cache/factory/CacheFactory";
 import useCaseInterface from "../../@shared/UseCaseInterface";
 import FindAllEmployeeInDto from "./FindAllEmployeeInDto";
 import FindAllEmployeeOutDto from "./FindAllEmployeeOutDto";
@@ -14,10 +15,20 @@ export default class FindAllEmployeeUseCase implements useCaseInterface<FindAllE
 
     async execute(input: FindAllEmployeeInDto): Promise<FindAllEmployeeOutDto> {
         try {
-           
+            const cache=CacheFactory.execute()
+            let findResult:FindAllEmployeeOutDto;
+            let key="employee: "
+            key+=Object.values(input).join(",")
+              const client=await cache.getValue(key)
+              
+              if(client){
+                findResult=JSON.parse(client) as FindAllEmployeeOutDto
+                return findResult
+                }
+              
           const result=await this.employeeRepository.findAll(input.sort,input.filter,input.limit,input.page);  
   
-          const findResult:FindAllEmployeeOutDto={
+        findResult={
               entity: result.entity.map((res) =>{return{
                 id:res.Id,
                 name:res.Name,
@@ -40,7 +51,7 @@ export default class FindAllEmployeeUseCase implements useCaseInterface<FindAllE
             number_of_elements:result.number_of_elements,
             total_page:result.total_page
         }
-   
+        await cache.insertValue(key,JSON.stringify(findResult))
           return findResult;
         } catch (error) {
             const err= error as Error;

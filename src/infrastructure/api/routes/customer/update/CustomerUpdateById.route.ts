@@ -3,7 +3,7 @@ import CreateCustomerUseCase from "../../../../../use-case/customer/create/Creat
 import CustomerRepositorySequelize from "../../../../db/sequelize/customer/repository/CustomerRepositorySequelize";
 import CreateCustomerInDto from "../../../../../use-case/customer/create/CreateCustomerInDto";
 import {StatusCodes} from "http-status-codes"
-import UpdateCustomerInDto from "../../../../../use-case/customer/update/UpdateCustomerINDto";
+import UpdateCustomerInDto from "../../../../../use-case/customer/update/UpdateCustomerInDto";
 import UpdateCustomerUseCase from "../../../../../use-case/customer/update/UpdateCustomerUseCase";
 import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
 
@@ -12,7 +12,7 @@ export default class CustomerRouterUpdate{
 
 
     async execute(req:Request<{},{},UpdateCustomerInDto>,res:Response){
-        const customerRepository=DbFactoryRepositories.execute().customerRepository()
+        const customerRepository=DbFactoryRepositories.customerRepository()
         const usecase= new UpdateCustomerUseCase(customerRepository)
         try {
             const request=req.body

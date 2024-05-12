@@ -3,6 +3,7 @@ import useCaseInterface from "../../@shared/UseCaseInterface";
 import CustomerRepositoryInterface from "../../../domain/customer/repository/CustomerRepositoryInterface";
 import FindByEmailCustomerInDto from "./FindByEmailCustomerInDto";
 import FindByEmailCustomerOutDto from "./findByEmailCustomerOutDto";
+import CacheFactory from "../../../infrastructure/cache/factory/CacheFactory";
 
 export default class FindByEmailCustomerUseCase implements useCaseInterface<FindByEmailCustomerInDto,FindByEmailCustomerOutDto>{
     private customerRepository:CustomerRepositoryInterface;
@@ -13,9 +14,21 @@ export default class FindByEmailCustomerUseCase implements useCaseInterface<Find
 
     async execute(input: FindByEmailCustomerInDto): Promise<FindByEmailCustomerOutDto> {
         try {
+            const cache=CacheFactory.execute()
+            let findResult:FindByEmailCustomerOutDto;
+            
+            let keyCache:string="customer: "+input.email;
+            
+            const client=await cache.getValue(keyCache)
+
+              if(client){
+                findResult=JSON.parse(client) as FindByEmailCustomerOutDto
+                return findResult
+                }
+
             const result=await this.customerRepository.findByEmail(input.email);
-            if(result && result.Address){
-                const findResult:FindByEmailCustomerOutDto={ 
+          
+                findResult={ 
                 id:result.Id,   
                 name:result.Name,
                 email:result.Email,
@@ -23,7 +36,7 @@ export default class FindByEmailCustomerUseCase implements useCaseInterface<Find
                 date_of_birth:result.Date_of_birth,
                 isActive:result.IsActive,
                 address:{
-                    city:result.Address.City,
+                    city:result.Address?.City,
                     uf:result.Address?.Uf,
                     description:result.Address?.Description,
                     neighborhood:result.Address?.Neighborhood,
@@ -33,12 +46,11 @@ export default class FindByEmailCustomerUseCase implements useCaseInterface<Find
                 }
                 
             }
+            await cache.insertValue(keyCache,JSON.stringify(findResult))
+
             return findResult;
-            }
-            throw new Error("customer not found!")
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+            throw error
         }
     }
     

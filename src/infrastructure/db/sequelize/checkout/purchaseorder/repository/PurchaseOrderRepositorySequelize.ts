@@ -7,6 +7,8 @@ import PurchaseOrderRepositoryInterface from "../../../../../../domain/checkout/
 import { PurchaseOrderItemModel } from "../model/PurchaseOrderItemModel";
 import { PurchaseOrderModel } from "../model/PurchaseOrderModel";
 import { Sequelize } from "sequelize-typescript";
+import Product from "../../../../../../domain/checkout/products/entity/Product";
+import ProductModel from "../../products/model/ProductModel";
 
 export default class PurchaseOrderRepositorySequelize implements PurchaseOrderRepositoryInterface{
    
@@ -15,8 +17,10 @@ export default class PurchaseOrderRepositorySequelize implements PurchaseOrderRe
         this.sequelize=sequelize;
     }
    
-    async create(entity: PurchaseOrder): Promise<void> {
-        try {
+    async create(entity: PurchaseOrder,product:Product[]): Promise<void> {
+      const transaction: Transaction = await this.sequelize.transaction();  
+      try {
+        
         await PurchaseOrderModel.create({
                  id:entity.Id,
                  customer_id:entity.Customer_id,
@@ -32,9 +36,26 @@ export default class PurchaseOrderRepositorySequelize implements PurchaseOrderRe
                     total:res.Total
                  })),
                  discount:entity.Discount
-            },{include:[PurchaseOrderItemModel]})
-   
+            },{include:[PurchaseOrderItemModel],transaction})
+            
+            for (const res of product) {
+              await ProductModel.update({
+                name: res.Name,
+                price: res.Price,
+                quantity: res.Quantity,
+                category_id: res.Category_id
+              }, {
+                where: {
+                  id: res.Id
+                },
+                transaction
+              });
+            }
+
+           await transaction.commit()
+
         } catch (error) {
+        await transaction.rollback()
         throw new Error("error creating purchaseOrder record\n"+error);   
         }
         
@@ -93,58 +114,60 @@ export default class PurchaseOrderRepositorySequelize implements PurchaseOrderRe
             throw new Error("error when fetching all purchaseOrder record!\n"+error)
             
         }
+        
     }
     
-   async updateById(id: string, entity: PurchaseOrder): Promise<void> {
+
+async updateById(id: string, entity: PurchaseOrder,product:Product[]): Promise<void> {
   const transaction: Transaction = await this.sequelize.transaction();
 
   try {
-    const purchaseOrder = await PurchaseOrderModel.findByPk(id, { include: [PurchaseOrderItemModel] });
+    const purchaseOrderModel=await PurchaseOrderModel.findByPk(id,{include:[PurchaseOrderItemModel]})
+    const productsIdsExclude=entity.PurchaseOrderItems.filter((res)=>{
+      !purchaseOrderModel?.items.some(res2=>res2.id === res.ProductId)}).map(obj=>obj.ProductId)
+    
+      await PurchaseOrderItemModel.destroy({
+        where: {
+          product_id: {
+            [Op.in]:productsIdsExclude
+          }
+        },
+        transaction
+      });
+    
+      for (const res of product) {
+        await ProductModel.update({
+          name: res.Name,
+          price: res.Price,
+          quantity: res.Quantity,
+          category_id: res.Category_id
+        }, {
+          where: {
+            id: res.Id
+          },
+          transaction
+        });
+      }
 
-    if (purchaseOrder) {
-      const newItemsData = entity.PurchaseOrderItems.map((item) => ({
-        id: item.Id,
-        product_id: item.ProductId,
-        order_id: purchaseOrder.id,
-        quantity: item.Quantity,
-        price: item.UnitaryValue,
-        total: item.Total,
-      }));
-
-      await purchaseOrder.update({
+      await PurchaseOrderModel.update({
         customer_id: entity.Customer_id,
         employee_id: entity.Employee_id,
         date: entity.Data,
         total: entity.Total,
-        discount: entity.Discount,
-      }, { transaction });
+        items:entity.PurchaseOrderItems.map((res)=>({
+          id:res.Id,
+          product_id:res.ProductId,
+          order_id:entity.Id,
+          quantity:res.Quantity,
+          price:res.UnitaryValue,
+          total:res.Total
+       })),
+       discount:entity.Discount
+      }, {where:{
+        id:entity.Id
+      },
+       transaction });
 
-      await Promise.all(
-        purchaseOrder.items.map(async (item) => {
-          const newItemData = newItemsData.find((newItem) => newItem.id === item.id);
-
-          if (newItemData) {
-            item.id = newItemData.id;
-            item.quantity = newItemData.quantity;
-            item.product_id = newItemData.product_id;
-            item.price = newItemData.price;
-            item.total = newItemData.total;
-            await item.save({ transaction });
-          } else {
-            await item.destroy({ transaction });
-          }
-        })
-      );
-      await PurchaseOrderItemModel.bulkCreate(
-        newItemsData.filter((newItem) => !purchaseOrder.items.some((item) => item.id === newItem.id)),
-        { transaction }
-      );
-
-      await transaction.commit();
-      return;
-    }
-
-    throw new Error('Purchase order not found!');
   } catch (error) {
     await transaction.rollback();
     throw new Error(`Error when updating PurchaseOrder record!\n${error}`);

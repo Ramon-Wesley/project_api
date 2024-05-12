@@ -5,14 +5,17 @@ import SupplierRepositorySequelize from "../../../../db/sequelize/supplier/repos
 import {StatusCodes} from "http-status-codes"
 import FindAllSupplierInDto from "../../../../../use-case/supplier/findAll/FindAllSupplierInDto";
 import FindAllSupplierUseCase from "../../../../../use-case/supplier/findAll/FindAllSupplierUseCase";
+import DbFactory from "../../../../db/factory/DbFactory";
+import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
 
 
 export default class SupplierRouterFindAll{
 
 
     async execute(req:Request<{},{},{},FindAllSupplierInDto>,res:Response){
+        const supplierRepository=DbFactoryRepositories.supplierRepository()
         
-        const usecase= new FindAllSupplierUseCase(new SupplierRepositorySequelize())
+        const usecase= new FindAllSupplierUseCase(supplierRepository)
         
         try {
             const request:FindAllSupplierInDto={

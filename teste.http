@@ -1,0 +1,21 @@
+###
+POST http://localhost:3000/customer  
+
+content-type: application/json
+
+{
+            "name":"employee123",
+            "ra":"11829876643",
+            "email":"employee23@hotmail.com",
+            "date_of_birth":"01/01/01",
+            "address":{
+            "uf":"mg",
+            "city":"belo oriente",
+            "neighborhood":"floresta",
+            "zipCode":"35170-301",
+            "street":"magalhaes pinto",
+            "number":"123",
+            "description":""
+        },
+        "isActive":true
+}

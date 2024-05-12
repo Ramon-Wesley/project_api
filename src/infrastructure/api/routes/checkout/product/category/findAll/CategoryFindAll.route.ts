@@ -10,7 +10,7 @@ export default class CategoryRouterFindAll{
 
 
     async execute(req:Request<{},{},{},CategoryFindAllInDto>,res:Response){
-        const categoryRepository=DbFactoryRepositories.execute().categoryRepository()
+        const categoryRepository=DbFactoryRepositories.categoryRepository()
         const usecase= new CategoryFindAllUseCase(categoryRepository)
         
         try {

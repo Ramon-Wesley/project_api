@@ -5,6 +5,8 @@ import Customer from "../../../../../domain/customer/entity/Customer";
 import CustomerRepositoryInterface from "../../../../../domain/customer/repository/CustomerRepositoryInterface";
 import AddressModel from "../../address/model/AddressModel";
 import CustomerModel from "../model/CustomerModel";
+import CacheFactory from "../../../../cache/factory/CacheFactory";
+import FindCustomerOutDto from "../../../../../use-case/customer/find/FindCustomerOutDto";
 
 
 export default class CustomerRepositorySequelize implements CustomerRepositoryInterface{
@@ -12,14 +14,11 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
 
       try {
         const result= await CustomerModel.findOne({where:{email:email},include:[AddressModel]})
-       
+      
         if(result){
-          const customer=new Customer(result.id,result.name,result.cpf,result.email,result.date_of_birth)
-          const address=new Address(result.address.uf,result.address.city,result.address.neighborhood,
-          result.address.zipCode,result.address.street,result.address.number,result.address.description)
-          customer.changeAddress(address)
-          return customer
+          return this.changeForCustomer(result)
       }
+
       throw new Error("customer not found!!")
   } catch (error) {
     throw new Error("error when fetching customer with email record!\n"+error)
@@ -63,11 +62,7 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
     try {
       const result=await CustomerModel.findOne({where:{id:id}, include: [{ model: AddressModel}]})
         if(result){
-            const customer=new Customer(result.id,result.name,result.cpf,result.email,result.date_of_birth)
-            const address=new Address(result.address.uf,result.address.city,result.address.neighborhood,
-            result.address.zipCode,result.address.street,result.address.number,result.address.description)
-            customer.changeAddress(address)
-            return customer
+            return this.changeForCustomer(result)
         }
         throw new Error("customer not found!")
     } catch (error) {
@@ -121,11 +116,9 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
           })
           const totalElements=result.count
           const totalPages = Math.ceil(totalElements / limit);
+
           result.rows.forEach((res)=>{
-            let customer=new Customer(res.id,res.name,res.cpf,res.email,res.date_of_birth)
-           let address=new Address(res.address.uf,res.address.city,res.address.neighborhood,res.address.zipCode,res.address.street,res.address.number,res.address.description)
-            customer.changeAddress(address)
-            findAllCustomerResult.push(customer)
+            findAllCustomerResult.push(this.changeForCustomer(res))
           })
 
           const findAllResult:RepositoryFindAllResult<Customer>={
@@ -139,9 +132,6 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
       } catch (error) {
         throw new Error("error listing customer record!\n"+error)
       }
-    
-
-
     }
 
    
@@ -155,4 +145,11 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
       }
     }
 
+    private changeForCustomer(entity:CustomerModel){
+      const customer=new Customer(entity.id,entity.name,entity.cpf,entity.email,entity.date_of_birth)
+      const address=new Address(entity.address.uf,entity.address.city,entity.address.neighborhood,
+      entity.address.zipCode,entity.address.street,entity.address.number,entity.address.description)
+      customer.changeAddress(address)
+      return customer;
+    }
 }

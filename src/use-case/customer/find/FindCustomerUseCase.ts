@@ -2,6 +2,7 @@ import useCaseInterface from "../../@shared/UseCaseInterface";
 import FindCustomerINDto from "./FindCustomerINDto";
 import FindCustomerOutDto from "./FindCustomerOutDto";
 import CustomerRepositoryInterface from "../../../domain/customer/repository/CustomerRepositoryInterface";
+import CacheFactory from "../../../infrastructure/cache/factory/CacheFactory";
 
 export default class FindCustomerUseCase implements useCaseInterface<FindCustomerINDto,FindCustomerOutDto>{
     private customerRepository:CustomerRepositoryInterface;
@@ -12,31 +13,41 @@ export default class FindCustomerUseCase implements useCaseInterface<FindCustome
 
     async execute(input: FindCustomerINDto): Promise<FindCustomerOutDto> {
         try {
-            const result=await this.customerRepository.findById(input.id);
-            if(result && result.Address){
-                const findResult:FindCustomerOutDto={    
+            const cache=CacheFactory.execute()
+            let findResult:FindCustomerOutDto;
+           
+              const client=await cache.getValue(input.id)
+              
+              if(client){
+                findResult=JSON.parse(client) as FindCustomerOutDto
+                return findResult
+                }
+              
+              const result=await this.customerRepository.findById(input.id);
+       
+             findResult={    
                 name:result.Name,
                 email:result.Email,
                 cpf:result.Cpf,
                 date_of_birth:result.Date_of_birth,
                 isActive:result.IsActive,
                 address:{
-                    city:result.Address.City,
+                    city:result.Address?.City,
                     uf:result.Address?.Uf,
                     description:result.Address?.Description,
                     neighborhood:result.Address?.Neighborhood,
                     number:result.Address?.Number,
                     street:result.Address?.Street,
                     zipCode:result.Address?.ZipCode
-                }
-                
+                }        
             }
+            
+            const stringfyResult=JSON.stringify(findResult)
+            await cache.insertValue(input.id,stringfyResult)
+            
             return findResult;
-            }
-            throw new Error("customer not found!")
-        } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+          }  catch (error) {
+            throw error
         }
     }
     

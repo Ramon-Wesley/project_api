@@ -51,6 +51,16 @@ export default class Product extends Entity{
         this.validate()
     }
     
+    increaseQuantity(quantity:number){
+        this.quantity+=quantity;
+        this.validate()
+    }
+
+    decreaseQuantity(quantity:number){
+        this.quantity-=quantity;
+        this.validate()
+    }
+    
     get Id(){
         return this.id
     }

@@ -1,4 +1,5 @@
 import SupplierRepositoryInterface from "../../../domain/supplier/repository/SupplierRepositoryInterface";
+import CacheFactory from "../../../infrastructure/cache/factory/CacheFactory";
 import useCaseInterface from "../../@shared/UseCaseInterface";
 
 import FindByEmailSupplierInDto from "./FindByEmailSupplierInDto";
@@ -14,9 +15,20 @@ export default class FindByEmailSupplierUseCase implements useCaseInterface<Find
 
     async execute(input: FindByEmailSupplierInDto): Promise<FindByEmailSupplierOutDto> {
         try {
+            const cache=CacheFactory.execute()
+            let findResult:FindByEmailSupplierOutDto;
+            const key=input.email
+           
+              const client=await cache.getValue(key)
+              
+              if(client){
+                findResult=JSON.parse(client) as FindByEmailSupplierOutDto
+                return findResult
+                }
+              
             const result=await this.supplierRepository.findByEmail(input.email);
             if(result && result.Address){
-                const findResult:FindByEmailSupplierOutDto={ 
+                findResult={ 
                 id:result.Id,   
                 name:result.Name,
                 email:result.Email,
@@ -34,6 +46,7 @@ export default class FindByEmailSupplierUseCase implements useCaseInterface<Find
                 }
                 
             }
+            await cache.insertValue(key,JSON.stringify(findResult))
             return findResult;
             }
             throw new Error("supplier not found!")

@@ -9,7 +9,7 @@ export default class SupplierRouterUpdate{
 
 
     async execute(req:Request<{},{},UpdateSupplierInDto>,res:Response){
-        const supplierRepository=DbFactoryRepositories.execute().supplierRepository()
+        const supplierRepository=DbFactoryRepositories.supplierRepository()
         const usecase= new UpdateSupplierUseCase(supplierRepository)
         try {
             const request=req.body

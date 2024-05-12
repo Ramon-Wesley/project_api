@@ -8,10 +8,12 @@ export default class ProductService{
             res.changePrice(res.Price*per)
         })
     }
+
     static decreasePrice(products:Product[],percent:number){
         const per=100-percent/100
         products.forEach((res)=>{
             res.changePrice(res.Price*per)
         })
     }
+
 }

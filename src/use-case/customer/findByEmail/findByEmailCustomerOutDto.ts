@@ -4,14 +4,14 @@ export default interface FindByEmailCustomerOutDto{
     cpf:string;
     email:string;
     date_of_birth:Date;
-    address:{
-        uf:string;
-        city:string;
-        neighborhood:string;
-        zipCode:string;
-        street:string;
-        number:string;
-        description:string;
+    address?:{
+        uf?:string;
+        city?:string;
+        neighborhood?:string;
+        zipCode?:string;
+        street?:string;
+        number?:string;
+        description?:string;
     };
     isActive:boolean;
 }

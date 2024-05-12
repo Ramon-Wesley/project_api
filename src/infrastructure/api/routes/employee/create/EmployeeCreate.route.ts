@@ -6,7 +6,7 @@ import CreateEmployeeUseCase from "../../../../../use-case/employee/create/Creat
 
 export default class EmployeeRouterCreate{
     async execute(req:Request<{},{},CreateEmployeeInDto>,res:Response){
-        const employeeRepository=DbFactoryRepositories.execute().employeeRepository()
+        const employeeRepository=DbFactoryRepositories.employeeRepository()
         const usecase= new CreateEmployeeUseCase(employeeRepository)
         
         try {

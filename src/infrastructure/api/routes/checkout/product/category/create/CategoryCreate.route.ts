@@ -7,9 +7,8 @@ import CategoryCreateUseCase from "../../../../../../../use-case/checkout/catego
 
 export default class CategoryRouterCreate{
     async execute(req:Request<{},{},CategoryCreateInDto>,res:Response){
-        const categoryRepository=DbFactoryRepositories.execute().categoryRepository()
+        const categoryRepository=DbFactoryRepositories.categoryRepository()
         const usecase= new CategoryCreateUseCase(categoryRepository)
-        
         try {
             const request=req.body
             await usecase.execute(request)

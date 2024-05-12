@@ -1,9 +1,5 @@
 import UpdateCustomerUseCase from "./UpdateCustomerUseCase";
 
-
-
-
-
 const mock=()=>{
     return {
     findById:jest.fn(),
@@ -43,7 +39,7 @@ describe("Test the update by id use case customer ", ()=>{
 
 it("update customer not found data",async ()=>{
     const customerRepository=mock();
-    customerRepository.updateById.mockImplementation(()=>{throw new Error("customer not found!")});
+    customerRepository.findById.mockImplementation(()=>{throw new Error("customer not found!")});
     const usecase=new UpdateCustomerUseCase(customerRepository);
     
     const input={
@@ -51,8 +47,8 @@ it("update customer not found data",async ()=>{
         name:"customer1",
         cpf:"640.819.000-60",
         email:"customer@hotmail.com",
-    date_of_birth:new Date(),
-    address:{
+        date_of_birth:new Date(),
+        address:{
         uf:"mg",
         city:"belo oriente",
         neighborhood:"floresta",

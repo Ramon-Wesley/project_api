@@ -25,14 +25,11 @@ export default class CustomerZodValidator implements ValidatorInterface<Customer
           
        err.errors.forEach((res)=>{
          entity.getNotification().insertErrors({
-           context:"customer",
+             context:"customer",
               message:res.message
             })
             })
 
-
-            
-          
         }
     }
 
