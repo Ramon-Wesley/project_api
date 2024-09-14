@@ -26,27 +26,28 @@ services:
       POSTGRES_DB: databaseapi
       POSTGRES_PASSWORD: admin
     ports:
-      - "5433:5432"
+      - "5433:5432"  # Mapeia a porta 5433 do host para a porta 5432 do contêiner
     volumes:
-      - ./db_date:/var/lib/postgresql/data
+      - ./db_data:/var/lib/postgresql/data  # Corrigido o nome do volume para 'db_data'
     networks:
       - nodeNetwork
+
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080  
-    networks:
-      - nodeNetwork 
-  redis:
-    image: redis
-    container_name: app-redis
-    ports: 
-      - 6379:6379 
+      - "8080:8080"
     networks:
       - nodeNetwork
+
+  redis:
+    image: redis:alpine
+    container_name: app-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - nodeNetwork
+
 networks:
   nodeNetwork:
     driver: bridge
-    
-
