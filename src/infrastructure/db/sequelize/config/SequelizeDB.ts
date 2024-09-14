@@ -16,6 +16,8 @@ import SchedulingServicesModel from "../scheduling/schedulingServices/model/Sche
 import AppointmentBookingModel from "../scheduling/appointment-booking/model/AppointmentBookingModel";
 import AppointmentBookingSchedulingService from "../scheduling/appointment-booking/model/AppointmentBookingSchedulingServiceModel";
 import CategoryModel from "../checkout/products/category/model/CategoryModel";
+import UserModel from "../user/model/UserModel";
+import { RefreshTokenModel } from "../refreshToken/model/RefreshTokenModel";
 
 export default class SequelizeDb{
     private static sequelize:Sequelize|undefined;
@@ -34,21 +36,31 @@ export default class SequelizeDb{
                     dialect:process.env.DB as Dialect,
                     port:Number(process.env.DB_PORT),
                     logging:false,
-                    models:[                        
+                    models:[   
+                        UserModel,                     
                         CustomerModel,AddressModel,
                         SupplierModel,EmployeeModel,
                         ProductModel,CategoryModel,
                         PurchaseOrderModel,PurchaseOrderItemModel,
                         SaleOrderModel,SaleOrderItemModel,
                         RaceModel,AnimalModel,
+                        RefreshTokenModel,
                         SchedulingServicesModel,AppointmentBookingModel,AppointmentBookingSchedulingService],
                 })
           
                 return await SequelizeDb.sequelize.sync();
                              
         } catch (error) {
-            
-            throw new Error(`error when connecting to ${process.env.DB} database!`+error)
+            console.log({
+                database:process.env.DB_NAME,
+                username:process.env.DB_USERNAME,
+                password:process.env.DB_PASSWORD,
+                storage:process.env.DB_STORAGE,
+                host:process.env.DB_HOST,
+                dialect:process.env.DB as Dialect,
+                port:Number(process.env.DB_PORT)
+            })
+            throw new Error(`error when connecting to ${process.env.DB} database!`+ error)
         }
     }
 }

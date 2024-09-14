@@ -25,6 +25,10 @@ export default class DbFactoryRepositories{
         return DbFactoryRepositories.execute().supplierRepository()
     }
 
+    static userRepository(){
+        return DbFactoryRepositories.execute().userRepository()
+    }
+
     static categoryRepository(){
         return DbFactoryRepositories.execute().categoryRepository()
     }
@@ -32,5 +36,10 @@ export default class DbFactoryRepositories{
     static productRepository(){
         return DbFactoryRepositories.execute().productRepository()
     }
+
+    static refreshTokenRepository(){
+        return DbFactoryRepositories.execute().refreshTokenRepository()
+    }
+
 
 }

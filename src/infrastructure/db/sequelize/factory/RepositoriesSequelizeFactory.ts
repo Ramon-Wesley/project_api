@@ -2,7 +2,9 @@ import CategoryRepositorySequelize from "../checkout/products/category/repositor
 import ProductRepositorySequelize from "../checkout/products/repository/ProductRepository";
 import CustomerRepositorySequelize from "../customer/repository/CustomerRepositorySequelize";
 import EmployeeRepositorySequelize from "../employee/repository/EmployeeRepositorySequelize";
+import RefreshTokenRepositorySequelize from "../refreshToken/repository/RefreshTokenRepositorySequelize";
 import SupplierRepositorySequelize from "../supplier/repository/SupplierRepositorySequelize";
+import UserRepositorySequelize from "../user/repository/UserRepositorySequelize";
 
 export default class RepositoriesSequelizeFactory{
 
@@ -28,7 +30,14 @@ export default class RepositoriesSequelizeFactory{
         return new ProductRepositorySequelize()
     }
 
+    static userRepository(){
+        return new UserRepositorySequelize()
+    }
+
+    static refreshTokenRepository(){
+        return new RefreshTokenRepositorySequelize()
    
 
 }
 
+}
