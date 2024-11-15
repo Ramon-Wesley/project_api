@@ -24,7 +24,7 @@ describe("test purchaseOrder create use case ",()=>{
         findByEmail:jest.fn()
     }
     }
-    const mockCustomer=()=>{
+    const mockSupplier=()=>{
         return {
         findById:jest.fn(),
         create:jest.fn(),
@@ -45,9 +45,9 @@ describe("test purchaseOrder create use case ",()=>{
     }
     }
     it("create purchase order use case",async()=>{
-        const usecase=new PurchaseOrderCreateUseCase(mock(),mockProduct(),mockCustomer(),mockEmployee())
+        const usecase=new PurchaseOrderCreateUseCase(mock(),mockProduct(),mockSupplier(),mockEmployee())
         const purchaseOrderCreateDto:PurchaseOrderCreateInDto={
-          customer_id:"1",
+          supplier_id:"1",
           employee_id:"1",
           items:[{
             product_id:"1",

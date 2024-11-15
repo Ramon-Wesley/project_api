@@ -1,4 +1,4 @@
-import { PurchaseOrderItemInterface } from './../purchaseOrder-item/validator/PurchaseOrder-item.zod';
+import { PurchaseOrderItemInterface } from '../purchaseOrder-item/validator/PurchaseOrder-item.zod';
 import ValidatorInterface from "../../../@shared/validator/Validator.interface";
 import PurchaseOrder from "../entity/PurchaseOrder";
 import z, { ZodError } from "zod"
@@ -8,17 +8,17 @@ export default class PurchaseOrderZodValidator implements ValidatorInterface<Pur
     validate(entity: PurchaseOrder): void {
        const validation=z.object({
         id:z.string().trim().min(1,"Invalid purchaseOrder id!"),
-        customer_id:z.string().trim().min(1,"Invalid Customer_id!"),
-        employee_id:z.string().trim().min(1,"Invalid Employee_id!"),
-         data:z.date(), 
+        supplier_id:z.string().refine((value)=>value.trim().length > 0,"Invalid Supplier_id!"),
+        employee_id:z.string().refine((value)=>value.trim().length > 0,"Invalid Employee_id!"), data:z.date(), 
         purchaseOrderItems:z.array(z.object({
             id:z.string().trim().min(1,"Invalid purchaseOrder-item id!"),
             product_id:z.string().trim().min(1,"Invalid  product_id!"),
             quantity:z.number().min(1,"PurchaseOrderItems must have at least 1 item!"),
             unitaryValue:z.number().min(0,"The unit value must not be less than zero!"),
             total:z.number().min(0).min(0,"The total must not be less than zero!"),
-        })).refine((value)=>value.length > 0,"The PurchaseItems must not be less than zero!"),
-        total:z.number().min(0,"The total must not be less than zero!")
+        })).refine((value)=>value.length > 0,"PurchaseOrderItems must have at least 1 item!"),
+        total:z.number().min(0),
+       discount:z.number().min(0)
        })
 
        try {

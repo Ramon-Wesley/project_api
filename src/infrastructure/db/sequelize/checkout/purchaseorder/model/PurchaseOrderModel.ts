@@ -1,11 +1,11 @@
-import { BelongsTo, Column, ForeignKey, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { PurchaseOrderItemModel } from "./PurchaseOrderItemModel";
-import CustomerModel from "../../../customer/model/CustomerModel";
+import SupplierModel from "../../../supplier/model/SupplierModel";
 import EmployeeModel from "../../../employee/model/EmployeeModel";
 
 @Table({
     tableName:"PurchaseOrder",
-    timestamps:false
+    timestamps:true
 })
 export class PurchaseOrderModel extends Model{
 
@@ -13,29 +13,41 @@ export class PurchaseOrderModel extends Model{
     @Column
     declare id:string;
 
-    @ForeignKey(()=>CustomerModel)
+    @ForeignKey(()=>SupplierModel)
     @Column({allowNull:false})
-    declare customer_id:string;
+    declare supplier_id:string;
    
-    @BelongsTo(()=>CustomerModel)
-    declare customer:CustomerModel;
+    @BelongsTo(()=>SupplierModel)
+    declare supplier:SupplierModel;
 
-    
     @ForeignKey(()=>EmployeeModel)
     declare employee_id:string;
     
     @BelongsTo(()=>EmployeeModel)
     declare employee:EmployeeModel;
     
-    @Column({allowNull:false})
+    @Column({
+        allowNull: false,
+        type: DataType.DATE,
+        validate: { isDate: true },
+      })
+
     declare date:Date;
 
-    @Column({allowNull:false})
+    @Column({
+        allowNull: false,
+        type: DataType.INTEGER,
+        validate: { min: 0 }
+    })
     declare total:number;
 
     @HasMany(()=>PurchaseOrderItemModel)
     declare items:PurchaseOrderItemModel[];
 
-    @Column({allowNull:false})
+    @Column({
+        allowNull: false,
+        type: DataType.FLOAT,
+        validate: { min: 0 }
+    })
     declare discount:number;
 }

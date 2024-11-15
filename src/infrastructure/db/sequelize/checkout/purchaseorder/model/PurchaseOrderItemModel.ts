@@ -1,14 +1,14 @@
-import { BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Min, Model, PrimaryKey, Table } from 'sequelize-typescript';
 import ProductModel from '../../products/model/ProductModel';
 import { PurchaseOrderModel } from './PurchaseOrderModel';
 
 
 @Table({
     tableName:"PurchaseOrderItem",
-    timestamps:false
+    timestamps:true
     
 })
-export class PurchaseOrderItemModel extends Model{
+export class  PurchaseOrderItemModel extends Model{
 
     @PrimaryKey
     @Column
@@ -28,14 +28,25 @@ export class PurchaseOrderItemModel extends Model{
     @BelongsTo(()=>PurchaseOrderModel)
     declare order:PurchaseOrderModel;
     
-    @Column({allowNull:false})
-    declare quantity:number;
-    
-    @Column({allowNull:false})
-    declare price:number;
-    
-    @Column({allowNull:false})
-    declare total:number;
+    @Column({
+        allowNull: false,
+        type: DataType.INTEGER,
+        validate: { min: 0 }
+    })
+    declare quantity: number;
 
+    @Column({
+        allowNull: false,
+        type: DataType.FLOAT,
+        validate: { min: 0 }
+    })
+    declare price: number;
+
+    @Column({
+        allowNull: false,
+        type: DataType.FLOAT,
+        validate: { min: 0 }
+    })
+    declare total: number;
 
 }

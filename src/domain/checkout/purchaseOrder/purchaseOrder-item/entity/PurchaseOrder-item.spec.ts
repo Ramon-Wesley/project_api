@@ -25,7 +25,8 @@ describe("test the purchase order item entity",()=>{
             unitaryValue:-10     
         }
        expect(()=>new PurchaseOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue))
-       .toThrow("purchaseOrder-item: PurchaseOrderItems must have at least 1 item!,purchaseOrder-item: The unit value must not be less than zero!");
+       .toThrow("purchaseOrder-item: purchaseOrderItems must have at least 1 item!,purchaseOrder-item: The unit value must not be less than zero!"
+       );
        
        
     })
@@ -38,9 +39,7 @@ describe("test the purchase order item entity",()=>{
         }
         const resultOrderItem=new PurchaseOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue);
        expect(()=>resultOrderItem.changeQuantity(-10))
-       .toThrow("purchaseOrder-item: PurchaseOrderItems must have at least 1 item!");
-       
-       
+       .toThrow("purchaseOrder-item: purchaseOrderItems must have at least 1 item!");     
     })
 
 

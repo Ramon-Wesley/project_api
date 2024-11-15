@@ -1,6 +1,6 @@
 export default interface PurchaseOrderCreateInDto{
    
-                 customer_id:string,
+                 supplier_id:string,
                  employee_id:string,
                  date?:Date,
                  items:{

@@ -1,55 +1,64 @@
+import { Queue } from "bullmq";
 import ProductRepositoryInterface from "../../../../domain/checkout/products/repository/ProdoctRepositoryInterface";
-import PurchaseOrder from "../../../../domain/checkout/purchaseOrder/entity/PurchaseOrder";
+import purchaseOrder from "../../../../domain/checkout/purchaseOrder/entity/PurchaseOrder";
 import { PurchaseOrderFactory } from "../../../../domain/checkout/purchaseOrder/factory/PurchaseOrder.factory";
-import PurchaseOrderItem from "../../../../domain/checkout/purchaseOrder/purchaseOrder-item/entity/PurchaseOrder-item";
-import PurchaseOrderItemFactory from "../../../../domain/checkout/purchaseOrder/purchaseOrder-item/factory/PurchaseOrder-item.factory";
-import PurchaseOrderRepositoryInterface from "../../../../domain/checkout/purchaseOrder/repository/PurchaseOrder.repossitory";
-import CustomerRepositoryInterface from "../../../../domain/customer/repository/CustomerRepositoryInterface";
+import purchaseOrderItem from "../../../../domain/checkout/purchaseOrder/purchaseOrder-item/entity/PurchaseOrder-item";
+import purchaseOrderItemFactory from "../../../../domain/checkout/purchaseOrder/purchaseOrder-item/factory/PurchaseOrder-item.factory";
+import purchaseOrderRepositoryInterface from "../../../../domain/checkout/purchaseOrder/repository/PurchaseOrder.repository";
+import SupplierRepositoryInterface from "../../../../domain/supplier/repository/SupplierRepositoryInterface";
 import { EmployeeRepositoryInterface } from "../../../../domain/employee/repository/Employee.repository.interface";
 import useCaseInterface from "../../../@shared/UseCaseInterface";
 import PurchaseOrderCreateInDto from "./PurchaseOrderCreateInDto";
+import { QueueFactory } from "../../../../infrastructure/queue/factory/QueueFactory";
 
 export default class PurchaseOrderCreateUseCase implements useCaseInterface<PurchaseOrderCreateInDto,void>{
-   private purchaseOrderRepository:PurchaseOrderRepositoryInterface;
-   private productRepository:ProductRepositoryInterface;
-   private customerRepository:CustomerRepositoryInterface;
-   private employeeRepository:EmployeeRepositoryInterface;
-    
-   constructor(purchaseOrderRepository:PurchaseOrderRepositoryInterface,productRepository:ProductRepositoryInterface,customerRepository:CustomerRepositoryInterface,employeeRepository:EmployeeRepositoryInterface){
-        this.purchaseOrderRepository=purchaseOrderRepository;
-        this.productRepository=productRepository;
-        this.customerRepository=customerRepository;
-        this.employeeRepository=employeeRepository
+
+   constructor(
+    private readonly purchaseOrderRepository:purchaseOrderRepositoryInterface,
+    private readonly productRepository:ProductRepositoryInterface,
+    private readonly supplierRepository:SupplierRepositoryInterface,
+    private readonly employeeRepository:EmployeeRepositoryInterface){
     }
 
    async execute(input: PurchaseOrderCreateInDto): Promise<void> {
         try {
-            let purchaseOrderItem:PurchaseOrderItem[]=[];
-            let purchaseOrder:PurchaseOrder;
-            const customer=await this.customerRepository.findById(input.customer_id)
-            const employee=await this.employeeRepository.findById(input.employee_id)
-            const productIds=input.items.map(product=>product.product_id)
-            const products=await this.productRepository.findByIds(productIds)
-            
-            input.items.forEach((res)=>{
-                products.forEach((res2)=>{
-                    if(res.product_id===res2.Id){
-                        res2.decreaseQuantity(res.quantity)
+      
+                let purchaseOrderItem:purchaseOrderItem[]=[];
+                let purchaseOrder:purchaseOrder;
+                const productIds=input.items.map(product=>product.product_id)
+                
+                const [supplier,employee,products]=await Promise.all([
+                    this.supplierRepository.findById(input.supplier_id),
+                    this.employeeRepository.findById(input.employee_id),
+                    this.productRepository.findByIds(productIds)
+                ])
+                
+                const productMap=new Map(products.map(product=>[product.Id,product]));
+                
+                if(productIds.length!==products.length){
+                    throw new Error("product not found!")
+                }
+                
+                input.items.forEach((res)=>{
+                    const product=productMap.get(res.product_id)
+                    if(product){
+                        product.increaseQuantity(res.quantity)
+                        res.price=product.Price
                     }
+                    
+                    purchaseOrderItem.push(purchaseOrderItemFactory.create(res.product_id,res.quantity,res.price))
+                    
                 })
-                purchaseOrderItem.push(PurchaseOrderItemFactory.create(res.product_id,res.quantity,res.price))
-        
-            })
-
-            purchaseOrder=PurchaseOrderFactory.create(input.customer_id,input.employee_id,purchaseOrderItem)
-            
-            if(input.discount){
-                purchaseOrder.changeDiscount(input.discount)
+                
+                purchaseOrder=PurchaseOrderFactory.create(input.supplier_id,input.employee_id,purchaseOrderItem)
+                
+                if(input.discount){
+                    purchaseOrder.changeDiscount(input.discount)
+                }
+                await this.purchaseOrderRepository.create(purchaseOrder,products)
+            } catch (error) {
+                throw error;
             }
-            await this.purchaseOrderRepository.create(purchaseOrder,products)
-        } catch (error) {
-            throw error;
-        }
        
     }
 
