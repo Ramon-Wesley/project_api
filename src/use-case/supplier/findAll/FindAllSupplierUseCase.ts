@@ -28,7 +28,7 @@ export default class FindAllSupplierUseCase implements useCaseInterface<FindAllS
                 }
 
           const result=await this.supplierRepository.findAll(input.sort,input.filter,input.limit,input.page);  
-  
+                
           findResult={
               entity: result.entity.map((res) =>{return{
                 id:res.Id,
@@ -53,7 +53,7 @@ export default class FindAllSupplierUseCase implements useCaseInterface<FindAllS
             total_page:result.total_page
         }
         await cache.insertValue(key,JSON.stringify(findResult))
-        
+      
         return findResult;
  
     } catch (error) {

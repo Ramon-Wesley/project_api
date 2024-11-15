@@ -5,6 +5,7 @@ import Supplier from "../../../../../domain/supplier/entity/Supplier";
 import SupplierRepositoryInterface from "../../../../../domain/supplier/repository/SupplierRepositoryInterface";
 import AddressModel from "../../address/model/AddressModel";
 import SupplierModel from "../model/SupplierModel";
+import DatabaseError from "../../../../../domain/@shared/Errors/DatabaseError";
 
 export default class SupplierRepositorySequelize implements SupplierRepositoryInterface{
 
@@ -20,9 +21,9 @@ export default class SupplierRepositorySequelize implements SupplierRepositoryIn
         supplier.changeAddress(address)
         return supplier
     }
-    throw new Error("supplier not found!!")
+    throw new DatabaseError("supplier not found!!")
 } catch (error) {
-  throw new Error("error when fetching supplier with email record!\n"+error)
+  throw new DatabaseError("error when fetching supplier with email record!\n")
 }
   
 }
@@ -49,7 +50,7 @@ export default class SupplierRepositorySequelize implements SupplierRepositoryIn
     include: [AddressModel]
   }) 
   } catch (error) {
-    throw new Error("error creating supplier record\n"+error)
+    throw new DatabaseError("error creating supplier record!\n")
   }
   
     
@@ -66,9 +67,9 @@ export default class SupplierRepositorySequelize implements SupplierRepositoryIn
             supplier.changeAddress(address)
             return supplier
         }
-        throw new Error("Supplier not found!")
+        throw new DatabaseError("supplier not found!")
     } catch (error) {
-      throw new Error("error when fetching supplier record!\n"+error)
+      throw new DatabaseError("error when fetching supplier record!\n")
     }
         
     }
@@ -83,9 +84,9 @@ export default class SupplierRepositorySequelize implements SupplierRepositoryIn
           await supplier.update(entity,{where:{id:id}})
           return
         }
-        throw new Error('Supplier not found!');
+        throw new DatabaseError("supplier not found!")
       } catch (error) {
-        throw new Error('Error updating supplier record!\n' + error);
+        throw new DatabaseError("error when updating supplier record!\n")
       }
     }
 
@@ -117,7 +118,7 @@ export default class SupplierRepositorySequelize implements SupplierRepositoryIn
            return findAllResult
           
       } catch (error) {
-        throw new Error("error listing supplier record!\n"+error)
+        throw new DatabaseError("error listing supplier record!\n")
       }
     
 
@@ -129,7 +130,7 @@ export default class SupplierRepositorySequelize implements SupplierRepositoryIn
       try {
         await SupplierModel.destroy({where:{id:id}})
       } catch (error) {
-        throw new Error("error when deleting supplier record!\n"+error)
+        throw new DatabaseError("error when deleting supplier record!\n")
         
       }
     }
