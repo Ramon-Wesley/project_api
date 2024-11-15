@@ -1,7 +1,6 @@
 import express,{ Express } from "express"
 import DbFactory from "../../db/factory/DbFactory";
-import {router} from "../routes/index"
-import CacheFactory from "../../cache/factory/CacheConnectFactory";
+import {router} from "../routes"
 import cors from "cors"
 
 export default class ExpressConfig{

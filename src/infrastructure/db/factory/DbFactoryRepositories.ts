@@ -37,9 +37,15 @@ export default class DbFactoryRepositories{
         return DbFactoryRepositories.execute().productRepository()
     }
 
-    static refreshTokenRepository(){
-        return DbFactoryRepositories.execute().refreshTokenRepository()
+    static purchaseOrderRepository(){
+        return DbFactoryRepositories.execute().purchaseOrderRepository()
     }
+
+    static salesOrderRepository(){
+        return DbFactoryRepositories.execute().salesOrderRepository()
+    }
+
+
 
 
 }

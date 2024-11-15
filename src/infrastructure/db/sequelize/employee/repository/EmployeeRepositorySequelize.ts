@@ -6,6 +6,7 @@ import Employee from "../../../../../domain/employee/entity/Employee";
 import AddressModel from "../../address/model/AddressModel";
 import EmployeeModel from "../model/EmployeeModel";
 import { EmployeeRepositoryInterface } from "../../../../../domain/employee/repository/Employee.repository.interface";
+import DatabaseError from "../../../../../domain/@shared/Errors/DatabaseError";
 
 export default class EmployeeRepositorySequelize implements EmployeeRepositoryInterface{
 
@@ -34,7 +35,7 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
    include: [AddressModel]
  })   
  } catch (error) {
-  throw new Error("error creating employee record\n"+error)
+  throw new DatabaseError("error creating employee record!\n")
  }
     }
 
@@ -49,10 +50,10 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
            employee.changeAddress(address)
            return employee
        }
-       throw new Error("Employee not found!")
+       throw new DatabaseError("employee not found!")
     
    } catch (error) {
-    throw new Error("error when fetching employee record!\n"+error)
+    throw new DatabaseError("error when fetching employee record!\n")
    }
     } 
         
@@ -68,9 +69,9 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
           await employee.update(entity,{where:{id:id}})
           return
         }
-        throw new Error('employee not found!');
+        throw new DatabaseError("employee not found!")
       } catch (error) {
-        throw new Error('Error updating employee record!\n' + error);
+        throw new DatabaseError("error when updating employee record!\n")
       }
         }
     
@@ -105,7 +106,7 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
            return findAllResult
           
           } catch (error) {
-            throw new Error("error when fetching all employee record!\n"+error)
+            throw new DatabaseError("error listing employee record!\n")
           }
     }
 
@@ -113,7 +114,7 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
       try {
         await EmployeeModel.destroy({where:{id:id}})
       } catch (error) {
-        throw new Error("error when deleting employee record!\n"+error)
+        throw new DatabaseError("error when deleting employee record!\n")
       }
     }
 
@@ -130,10 +131,11 @@ export default class EmployeeRepositorySequelize implements EmployeeRepositoryIn
           employee.changeAddress(address)
           return employee
       }
-      throw new Error("employee not found!!")
+      throw new DatabaseError("employee not found!!")
   } catch (error) {
-    throw new Error("error when fetching employee with email record!\n"+error)
-  }
+    throw new DatabaseError("error when fetching employee with email record!\n"+error)    
     
   }
+
+    }
 }

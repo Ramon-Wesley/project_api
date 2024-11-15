@@ -1,3 +1,4 @@
+import DatabaseError from "../../../../../domain/@shared/Errors/DatabaseError";
 import RepositoryFindAllResult from "../../../../../domain/@shared/repository/RepositoryFindAllResult";
 import { User } from "../../../../../domain/users/entity/User";
 import { UserFactory } from "../../../../../domain/users/factory/UserFactory";
@@ -18,7 +19,7 @@ export default class UserRepositorySequelize implements UserRepositoryInterface{
             roles:entity.Roles as string
         })
        } catch (error) {
-        throw new Error("error creating user record\n"+error)
+        throw new DatabaseError("error when creating user record!\n")
        }
     }
     async findById(id: string): Promise<User> {
@@ -28,9 +29,9 @@ export default class UserRepositorySequelize implements UserRepositoryInterface{
                 const user=UserFactory.createWithId(result.id,result.name,result.email,result.password,result.isActive,result.roles)
                 return user 
             }
-            throw new Error("user not found!!")
+            throw new DatabaseError("user not found!")
         } catch (error) {
-            throw new Error("user not found!!")
+            throw new DatabaseError("user not found!")
         }
     }
    async findAll(sort: "desc" | "asc", filter: string, limit: number, page: number): Promise<RepositoryFindAllResult<User>> {
@@ -50,7 +51,7 @@ export default class UserRepositorySequelize implements UserRepositoryInterface{
             
             return userResult
        } catch (error) {
-        throw new Error("error when fetching user record!\n"+error)
+        throw new DatabaseError("error when fetching user record!\n")
         
        }
     }
@@ -66,17 +67,17 @@ export default class UserRepositorySequelize implements UserRepositoryInterface{
                 await UserModel.update(user,{where:{id:id}})
                 return
             }
-            throw new Error('user not found!');
+            throw new DatabaseError("user not found!")
         } catch (error) {
             
-            throw new Error('Error updating user record!\n' + error);
+            throw new DatabaseError("error when updating user record!\n")
         }
     }
     async deleteById(id: string): Promise<void> {
         try {
             await UserModel.destroy({where:{id:id}})
         } catch (error) {
-            throw new Error("error when deleting user record!\n"+error)
+            throw new DatabaseError("error when deleting user record!\n")
         }
     }
 
@@ -87,9 +88,9 @@ export default class UserRepositorySequelize implements UserRepositoryInterface{
                 const user=UserFactory.createWithId(result.id,result.name,result.email,result.password,result.isActive,result.roles)
                 return user
             }
-            throw new Error("user not found!!")
+            throw new DatabaseError("user not found!")
         } catch (error) {
-            throw new Error("user not found!!")
+            throw new DatabaseError("user not found!")
         }
     }
 }

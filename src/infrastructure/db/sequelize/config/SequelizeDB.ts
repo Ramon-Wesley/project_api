@@ -58,7 +58,7 @@ export default class SequelizeDb{
                 storage:process.env.DB_STORAGE,
                 host:process.env.DB_HOST,
                 dialect:process.env.DB as Dialect,
-                port:Number(process.env.DB_PORT)
+                port:Number(process.env.DB_PORT) 
             })
             throw new Error(`error when connecting to ${process.env.DB} database!`+ error)
         }

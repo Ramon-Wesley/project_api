@@ -14,7 +14,7 @@ export class RefreshTokenUserRouter{
     async execute(req:Request<{},{},RefreshTokenInDto>, res:Response ){
     const refreshToken=req.body
 
-    const useCase=new RefreshTokenUseCase(DbFactoryRepositories.refreshTokenRepository())
+    const useCase=new RefreshTokenUseCase(DbFactoryRepositories.userRepository())
 
     const token = await useCase.execute(refreshToken)
   

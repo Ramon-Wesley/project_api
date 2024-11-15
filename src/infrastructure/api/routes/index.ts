@@ -5,7 +5,8 @@ import categoryRouterApp from "./checkout/product/category/Category.index";
 import productRouterApp from "./checkout/product/Product.index";
 import supplierRouterApp from "./supplier/Supplier.index";
 import userRouterApp from "./users/UserRouterApp";
-
+import purchaseOrderRouterApp from "./checkout/purchaseOrder/Purchase.index";
+import salesOrderRouterApp from "./checkout/salesOrder/Sales.index";
 
 
 export const router: Router[] = [
@@ -14,5 +15,9 @@ export const router: Router[] = [
     categoryRouterApp,
     productRouterApp,
     supplierRouterApp,
-    userRouterApp
+    userRouterApp,
+    productRouterApp,
+    purchaseOrderRouterApp,
+    salesOrderRouterApp
+    
 ]

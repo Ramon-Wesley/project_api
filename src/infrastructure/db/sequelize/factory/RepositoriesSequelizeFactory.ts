@@ -1,10 +1,14 @@
+import { Sequelize } from "sequelize-typescript";
 import CategoryRepositorySequelize from "../checkout/products/category/repository/CategoryRepository";
 import ProductRepositorySequelize from "../checkout/products/repository/ProductRepository";
+import PurchaseOrderRepositorySequelize from "../checkout/purchaseorder/repository/PurchaseOrderRepositorySequelize";
 import CustomerRepositorySequelize from "../customer/repository/CustomerRepositorySequelize";
 import EmployeeRepositorySequelize from "../employee/repository/EmployeeRepositorySequelize";
-import RefreshTokenRepositorySequelize from "../refreshToken/repository/RefreshTokenRepositorySequelize";
+//import RefreshTokenRepositorySequelize from "../refreshToken/repository/RefreshTokenRepositorySequelize";
 import SupplierRepositorySequelize from "../supplier/repository/SupplierRepositorySequelize";
 import UserRepositorySequelize from "../user/repository/UserRepositorySequelize";
+import SaleOrderRepositorySequelize from "../checkout/salesOrder/repository/SaleOrderRepositorySequelize";
+import SequelizeDb from "../config/SequelizeDB";
 
 export default class RepositoriesSequelizeFactory{
 
@@ -34,10 +38,15 @@ export default class RepositoriesSequelizeFactory{
         return new UserRepositorySequelize()
     }
 
-    static refreshTokenRepository(){
-        return new RefreshTokenRepositorySequelize()
-   
+    static purchaseOrderRepository(){
+        const sequelize=SequelizeDb.getInstance().then(sequelize=>sequelize)
+        return new PurchaseOrderRepositorySequelize()
+    }
 
-}
+    static salesOrderRepository(){
+        return new SaleOrderRepositorySequelize()
+    }
+  
+
 
 }

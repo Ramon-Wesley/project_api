@@ -3,21 +3,13 @@ import UserModel from "../../user/model/UserModel";
 
 @Table({ tableName: "refresh_tokens", timestamps: true })
 export class RefreshTokenModel extends Model {
-    
-    @PrimaryKey 
-    @Column
-    declare id: string;
+
 
     @Column({
         allowNull: false
     })
-    declare expiresIn: string;
+    declare token: string;
 
-    @ForeignKey(() => UserModel)
-    @Column({
-        allowNull: false
-    })
-    declare user_id: string;
 
     @BelongsTo(() => UserModel, {
         foreignKey: 'user_id', 

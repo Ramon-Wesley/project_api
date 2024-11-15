@@ -8,6 +8,7 @@ export default class ServerExpress{
         dotenv.config();
         const port:number=Number(process.env.PORT) || 3000;
         const app=await ExpressConfig.execute()
+        
         app.listen(port,()=>{
             console.log("Server is listening on port "+port)
         })
