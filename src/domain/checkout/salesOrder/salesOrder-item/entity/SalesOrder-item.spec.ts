@@ -1,6 +1,6 @@
-import SaleOrderItem from "./SaleOrder-item";
+import SalesOrderItem from "./SalesOrder-item";
 
-describe("test the sale order item entity",()=>{
+describe("test the sales order item entity",()=>{
     it("correctly enter order data",()=>{
         const orderItem={
             id:"123",
@@ -8,7 +8,7 @@ describe("test the sale order item entity",()=>{
             quantity:10,
             unitaryValue:10     
         }
-       const orderItemResult=new SaleOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue);
+       const orderItemResult=new SalesOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue);
        
        expect(orderItemResult.Id).toBe(orderItem.id)
        expect(orderItemResult.ProductId).toBe(orderItem.product_id)
@@ -24,9 +24,8 @@ describe("test the sale order item entity",()=>{
             quantity:-10,
             unitaryValue:-10     
         }
-       expect(()=>new SaleOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue))
-       .toThrow("saleOrder-item: saleOrderItems must have at least 1 item!,saleOrder-item: The unit value must not be less than zero!"
-       );
+       expect(()=>new SalesOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue))
+       .toThrow("salesOrder-item: salesOrderItems must have at least 1 item!,salesOrder-item: The unit value must not be less than zero!");
        
        
     })
@@ -37,9 +36,11 @@ describe("test the sale order item entity",()=>{
             quantity:10,
             unitaryValue:10     
         }
-        const resultOrderItem=new SaleOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue);
+        const resultOrderItem=new SalesOrderItem(orderItem.id,orderItem.product_id,orderItem.quantity,orderItem.unitaryValue);
        expect(()=>resultOrderItem.changeQuantity(-10))
-       .toThrow("saleOrder-item: saleOrderItems must have at least 1 item!");     
+       .toThrow("salesOrder-item: salesOrderItems must have at least 1 item!");
+       
+       
     })
 
 

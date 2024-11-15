@@ -1,19 +1,19 @@
 
-import SupplierFactory from "../../../../../../domain/supplier/factory/SupplierFactory";
-import SupplierRepositorySequelize from "../../../supplier/repository/SupplierRepositorySequelize";
+import CustomerFactory from "../../../../../../domain/customer/factory/CustomerFactory";
+import CustomerRepositorySequelize from "../../../customer/repository/CustomerRepositorySequelize";
 import Address from "../../../../../../domain/@shared/object-value/address/Address";
-import SupplierModel from "../../../supplier/model/SupplierModel";
+import CustomerModel from "../../../customer/model/CustomerModel";
 import AddressModel from "../../../address/model/AddressModel";
 import EmployeeFactory from "../../../../../../domain/employee/factory/EmployeeFactory";
 import EmployeeRepositorySequelize from "../../../employee/repository/EmployeeRepositorySequelize";
 import EmployeeModel from "../../../employee/model/EmployeeModel";
-import {SaleOrderFactory}  from "../../../../../../domain/checkout/salesOrder/factory/SaleOrder.factory"
-import SaleOrderItemFactory from "../../../../../../domain/checkout/salesOrder/saleOrder-item/factory/SaleOrder-item.factory";
+import {SalesOrderFactory}  from "../../../../../../domain/checkout/salesOrder/factory/SalesOrder.factory"
+import SalesOrderItemFactory from "../../../../../../domain/checkout/salesOrder/salesOrder-item/factory/SalesOrder-item.factory";
 import ProductFactory from "../../../../../../domain/checkout/products/factory/Product.factory";
 import { SaleOrderItemModel } from "../model/SaleOrderItemModel";
 import { SaleOrderModel } from "../model/SaleOrderModel";
 import ProductRepositorySequelize from "../../products/repository/ProductRepository";
-import SaleOrderRepositorySequelize from "./SaleOrderRepositorySequelize";
+import SalesOrderRepositorySequelize from "./SaleOrderRepositorySequelize";
 import { Sequelize } from "sequelize-typescript";
 import { Op } from "sequelize";
 import SequelizeDb from "../../../config/SequelizeDB";
@@ -22,7 +22,7 @@ import Product from "../../../../../../domain/checkout/products/entity/Product";
 import CategoryModel from "../../products/category/model/CategoryModel";
 
 
-describe("test the saleOrderReppository", () => {
+describe("test the salesOrderReppository", () => {
     let sequelize:Sequelize;  
 
       
@@ -35,14 +35,14 @@ describe("test the saleOrderReppository", () => {
          await sequelize.close()
          
      })
-    it("save sale order data correctly", async()=>{
-        const supplierRepository= new SupplierRepositorySequelize();
+    it("save sales order data correctly", async()=>{
+        const customerRepository= new CustomerRepositorySequelize();
         const address=new Address("MG","city1","bairro","35170-300","ruab","123")
-        const supplier=SupplierFactory.createWithAddress("supplier1","15.287.087/0001-05",
-        "supplier@hotmail.com",new Date("2000-01-01"),address)
+        const customer=CustomerFactory.createWithAddress("customer1","15.287.087/0001-05",
+        "customer@hotmail.com",new Date("2000-01-01"),address)
         
-        await supplierRepository.create(supplier);
-        const supplierModel=await SupplierModel.findOne({where:{id:supplier.Id}, include: [{ model: AddressModel}]})
+        await customerRepository.create(customer);
+        const customerModel=await CustomerModel.findOne({where:{id:customer.Id}, include: [{ model: AddressModel}]})
 
         const employeeRepository= new EmployeeRepositorySequelize();
         const employee=EmployeeFactory.createWithAddress("employee1","12345678",
@@ -67,33 +67,33 @@ describe("test the saleOrderReppository", () => {
         const result=new Product(product.id,product.name,product.price,product.quantity,category.Id);
         await productRepository.create(result);
     
-        const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
-        const saleOrderItem=SaleOrderItemFactory.create(result.Id,10,result.Price)
-        const saleOrder=SaleOrderFactory.create(supplier.Id,employee.Id,[saleOrderItem]);
+        const salesOrderRepository= new SalesOrderRepositorySequelize(sequelize);
+        const salesOrderItem=SalesOrderItemFactory.create(result.Id,10,result.Price)
+        const salesOrder=SalesOrderFactory.create(customer.Id,employee.Id,[salesOrderItem]);
         
-        await saleOrderRepository.create(saleOrder);
+        await salesOrderRepository.create(salesOrder);
         
-        const saleOrderModel=await SaleOrderModel.findOne({where:{id:saleOrder.Id},include:[{model:SaleOrderItemModel}]})
+        const salesOrderModel=await SaleOrderModel.findOne({where:{id:salesOrder.Id},include:[{model:SaleOrderItemModel}]})
 
-        expect(saleOrderModel).toBeDefined()
-        expect(saleOrderModel?.id).toBe(saleOrder.Id)
-        expect(saleOrderModel?.supplier_id).toBe(supplierModel?.id)
-        expect(saleOrderModel?.employee_id).toBe(employeeModel?.id)
-        expect(saleOrderModel?.items.length).toBe(1)
-        expect(saleOrderModel?.items[0].id).toBe(saleOrderItem.Id)
-        expect(saleOrderModel?.items[0].product_id).toBe(result.Id)
-        expect(saleOrderModel?.items[0].quantity).toBe(saleOrderItem.Quantity)
-        expect(saleOrderModel?.items[0].total).toBe(saleOrderItem.Total)     
+        expect(salesOrderModel).toBeDefined()
+        expect(salesOrderModel?.id).toBe(salesOrder.Id)
+        expect(salesOrderModel?.customer_id).toBe(customerModel?.id)
+        expect(salesOrderModel?.employee_id).toBe(employeeModel?.id)
+        expect(salesOrderModel?.items.length).toBe(1)
+        expect(salesOrderModel?.items[0].id).toBe(salesOrderItem.Id)
+        expect(salesOrderModel?.items[0].product_id).toBe(result.Id)
+        expect(salesOrderModel?.items[0].quantity).toBe(salesOrderItem.Quantity)
+        expect(salesOrderModel?.items[0].total).toBe(salesOrderItem.Total)     
     })
 
-    it("update sale order data correctly", async()=>{
-        const supplierRepository= new SupplierRepositorySequelize();
+    it("update sales order data correctly", async()=>{
+        const customerRepository= new CustomerRepositorySequelize();
         const address=new Address("MG","city1","bairro","35170-300","ruab","123")
-        const supplier=SupplierFactory.createWithAddress("supplier1","15.287.087/0001-05",
-        "supplier@hotmail.com",new Date("2000-01-01"),address)
+        const customer=CustomerFactory.createWithAddress("customer1","15.287.087/0001-05",
+        "customer@hotmail.com",new Date("2000-01-01"),address)
         
-        await supplierRepository.create(supplier);
-        const supplierModel=await SupplierModel.findOne({where:{id:supplier.Id}, include: [{ model: AddressModel}]})
+        await customerRepository.create(customer);
+        const customerModel=await CustomerModel.findOne({where:{id:customer.Id}, include: [{ model: AddressModel}]})
 
         const employeeRepository= new EmployeeRepositorySequelize();
         const employee=EmployeeFactory.createWithAddress("employee1","12345678",
@@ -110,47 +110,47 @@ describe("test the saleOrderReppository", () => {
  
       
         
-        const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
-        const saleOrderItem=SaleOrderItemFactory.create(product.Id,10,product.Price)
-        const saleOrder=SaleOrderFactory.create(supplier.Id,employee.Id,[saleOrderItem]);
+        const salesOrderRepository= new SalesOrderRepositorySequelize(sequelize);
+        const salesOrderItem=SalesOrderItemFactory.create(product.Id,10,product.Price)
+        const salesOrder=SalesOrderFactory.create(customer.Id,employee.Id,[salesOrderItem]);
         
-        await saleOrderRepository.create(saleOrder);
+        await salesOrderRepository.create(salesOrder);
         
-        const saleOrderModel=await SaleOrderModel.findOne({where:{id:saleOrder.Id},include:[{model:SaleOrderItemModel}]})
+        const salesOrderModel=await SaleOrderModel.findOne({where:{id:salesOrder.Id},include:[{model:SaleOrderItemModel}]})
       
         const product2=ProductFactory.create("product2",200,10,category.Id);
         await productRepository.create(product2);
 
-        const saleOrderItem2=SaleOrderItemFactory.create(product2.Id,20,product2.Price)
+        const salesOrderItem2=SalesOrderItemFactory.create(product2.Id,20,product2.Price)
         
-        saleOrderItem.changeQuantity(5)
-        saleOrder.changeSaleOrderItems([saleOrderItem,saleOrderItem2])
-        await saleOrderRepository.updateById(saleOrder.Id,saleOrder);
-        const saleOrderModel2=await SaleOrderModel.findOne({where:{id:saleOrder.Id},include:[{model:SaleOrderItemModel}]})
+        salesOrderItem.changeQuantity(5)
+        salesOrder.changeSalesOrderItems([salesOrderItem,salesOrderItem2])
+        await salesOrderRepository.updateById(salesOrder.Id,salesOrder);
+        const salesOrderModel2=await SaleOrderModel.findOne({where:{id:salesOrder.Id},include:[{model:SaleOrderItemModel}]})
        
-        expect(saleOrderModel2).toBeDefined()
-        expect(saleOrderModel2?.id).toBe(saleOrder.Id)
-        expect(saleOrderModel2?.supplier_id).toBe(supplierModel?.id)
-        expect(saleOrderModel2?.employee_id).toBe(employeeModel?.id)
-        expect(saleOrderModel2?.items.length).toBe(2)
-        expect(saleOrderModel2?.items[0].id).toBe(saleOrderItem.Id)
-        expect(saleOrderModel2?.items[0].product_id).toBe(product.Id)
-        expect(saleOrderModel2?.items[0].quantity).toBe(saleOrderItem.Quantity)
-        expect(saleOrderModel2?.items[0].total).toBe(saleOrderItem.Total)  
-        expect(saleOrderModel2?.items[1].id).toBe(saleOrderItem2.Id)
-        expect(saleOrderModel2?.items[1].product_id).toBe(product2.Id)
-        expect(saleOrderModel2?.items[1].quantity).toBe(saleOrderItem2.Quantity)
-        expect(saleOrderModel2?.items[1].total).toBe(saleOrderItem2.Total)   
+        expect(salesOrderModel2).toBeDefined()
+        expect(salesOrderModel2?.id).toBe(salesOrder.Id)
+        expect(salesOrderModel2?.customer_id).toBe(customerModel?.id)
+        expect(salesOrderModel2?.employee_id).toBe(employeeModel?.id)
+        expect(salesOrderModel2?.items.length).toBe(2)
+        expect(salesOrderModel2?.items[0].id).toBe(salesOrderItem.Id)
+        expect(salesOrderModel2?.items[0].product_id).toBe(product.Id)
+        expect(salesOrderModel2?.items[0].quantity).toBe(salesOrderItem.Quantity)
+        expect(salesOrderModel2?.items[0].total).toBe(salesOrderItem.Total)  
+        expect(salesOrderModel2?.items[1].id).toBe(salesOrderItem2.Id)
+        expect(salesOrderModel2?.items[1].product_id).toBe(product2.Id)
+        expect(salesOrderModel2?.items[1].quantity).toBe(salesOrderItem2.Quantity)
+        expect(salesOrderModel2?.items[1].total).toBe(salesOrderItem2.Total)   
     })
 
-    it("find by id sale order data",async()=>{
-        const supplierRepository= new SupplierRepositorySequelize();
+    it("find by id sales order data",async()=>{
+        const customerRepository= new CustomerRepositorySequelize();
         const address=new Address("MG","city1","bairro","35170-300","ruab","123")
-        const supplier=SupplierFactory.createWithAddress("supplier1","15.287.087/0001-05",
-        "supplier@hotmail.com",new Date("2000-01-01"),address)
+        const customer=CustomerFactory.createWithAddress("customer1","15.287.087/0001-05",
+        "customer@hotmail.com",new Date("2000-01-01"),address)
         
-        await supplierRepository.create(supplier);
-        const supplierModel=await SupplierModel.findOne({where:{id:supplier.Id}, include: [{ model: AddressModel}]})
+        await customerRepository.create(customer);
+        const customerModel=await CustomerModel.findOne({where:{id:customer.Id}, include: [{ model: AddressModel}]})
 
         const employeeRepository= new EmployeeRepositorySequelize();
         const employee=EmployeeFactory.createWithAddress("employee1","12345678",
@@ -165,33 +165,33 @@ describe("test the saleOrderReppository", () => {
         const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
-        const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
-        const saleOrderItem=SaleOrderItemFactory.create(product.Id,10,product.Price)
-        const saleOrder=SaleOrderFactory.create(supplier.Id,employee.Id,[saleOrderItem]);
+        const salesOrderRepository= new SalesOrderRepositorySequelize(sequelize);
+        const salesOrderItem=SalesOrderItemFactory.create(product.Id,10,product.Price)
+        const salesOrder=SalesOrderFactory.create(customer.Id,employee.Id,[salesOrderItem]);
         
-        await saleOrderRepository.create(saleOrder);
+        await salesOrderRepository.create(salesOrder);
 
-        const saleResult=await saleOrderRepository.findById(saleOrder.Id);
-        expect(saleResult).toBeDefined()
-        expect(saleResult?.Id).toBe(saleOrder.Id)
-        expect(saleResult.Data.toString()).toBe(saleOrder.Data.toString())
-        expect(saleResult?.Supplier_id).toBe(supplierModel?.id)
-        expect(saleResult?.Employee_id).toBe(employeeModel?.id)
-        expect(saleResult?.SaleOrderItems.length).toBe(1)
-        expect(saleResult?.SaleOrderItems[0].Id).toBe(saleOrderItem.Id)
-        expect(saleResult?.SaleOrderItems[0].ProductId).toBe(product.Id)
-        expect(saleResult?.SaleOrderItems[0].Quantity).toBe(saleOrderItem.Quantity)
-        expect(saleResult?.SaleOrderItems[0].Total).toBe(saleOrderItem.Total) 
+        const salesResult=await salesOrderRepository.findById(salesOrder.Id);
+        expect(salesResult).toBeDefined()
+        expect(salesResult?.Id).toBe(salesOrder.Id)
+        expect(salesResult.Data.toString()).toBe(salesOrder.Data.toString())
+        expect(salesResult?.Customer_id).toBe(customerModel?.id)
+        expect(salesResult?.Employee_id).toBe(employeeModel?.id)
+        expect(salesResult?.SalesOrderItems.length).toBe(1)
+        expect(salesResult?.SalesOrderItems[0].Id).toBe(salesOrderItem.Id)
+        expect(salesResult?.SalesOrderItems[0].ProductId).toBe(product.Id)
+        expect(salesResult?.SalesOrderItems[0].Quantity).toBe(salesOrderItem.Quantity)
+        expect(salesResult?.SalesOrderItems[0].Total).toBe(salesOrderItem.Total) 
 
     })
 
-    it("find All sale order data orderBy DESC",async()=>{
-        const supplierRepository= new SupplierRepositorySequelize();
+    it("find All sales order data orderBy DESC",async()=>{
+        const customerRepository= new CustomerRepositorySequelize();
         const address=new Address("MG","city1","bairro","35170-300","ruab","123")
-        const supplier=SupplierFactory.createWithAddress("supplier1","15.287.087/0001-05",
-        "supplier@hotmail.com",new Date("2000-01-01"),address)
+        const customer=CustomerFactory.createWithAddress("customer1","15.287.087/0001-05",
+        "customer@hotmail.com",new Date("2000-01-01"),address)
         
-        await supplierRepository.create(supplier);
+        await customerRepository.create(customer);
        
         const employeeRepository= new EmployeeRepositorySequelize();
         const employee=EmployeeFactory.createWithAddress("employee1","12345678",
@@ -205,15 +205,15 @@ describe("test the saleOrderReppository", () => {
         const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
-        const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
-        const saleOrderItem=SaleOrderItemFactory.create(product.Id,10,product.Price)
-        const saleOrder=SaleOrderFactory.create(supplier.Id,employee.Id,[saleOrderItem]);
+        const salesOrderRepository= new SalesOrderRepositorySequelize(sequelize);
+        const salesOrderItem=SalesOrderItemFactory.create(product.Id,10,product.Price)
+        const salesOrder=SalesOrderFactory.create(customer.Id,employee.Id,[salesOrderItem]);
         
-        await saleOrderRepository.create(saleOrder);
+        await salesOrderRepository.create(salesOrder);
 
-        const saleOrderItem2=SaleOrderItemFactory.create(product.Id,10,product.Price)
-        const saleOrder2=SaleOrderFactory.create(supplier.Id,employee.Id,[saleOrderItem2]);
-        await saleOrderRepository.create(saleOrder2);
+        const salesOrderItem2=SalesOrderItemFactory.create(product.Id,10,product.Price)
+        const salesOrder2=SalesOrderFactory.create(customer.Id,employee.Id,[salesOrderItem2]);
+        await salesOrderRepository.create(salesOrder2);
 
 
         const sort="desc"
@@ -221,47 +221,47 @@ describe("test the saleOrderReppository", () => {
         const limit=7
         const page=1
 
-        const saleResult=await saleOrderRepository.findAll(sort,filter,limit,page)
+        const salesResult=await salesOrderRepository.findAll(sort,filter,limit,page)
         
-        expect(saleResult.entity[0].Id).toBe(saleOrder2.Id)
-        expect(saleResult.entity[0].Supplier_id).toBe(saleOrder2.Supplier_id)
-        expect(saleResult.entity[0].Employee_id).toBe(saleOrder2.Employee_id)
-        expect(saleResult.entity[0].Total).toBe(saleOrder2.Total)
-        expect(saleResult.entity[0].SaleOrderItems[0].Id).toBe(saleOrder2.SaleOrderItems[0].Id)
-        expect(saleResult.entity[0].Data.toString()).toBe(saleOrder2.Data.toString())
-        expect(saleResult.entity[0].SaleOrderItems[0].ProductId).toBe(saleOrder2.SaleOrderItems[0].ProductId)
-        expect(saleResult.entity[0].SaleOrderItems[0].Quantity).toBe(saleOrder2.SaleOrderItems[0].Quantity)
-        expect(saleResult.entity[0].SaleOrderItems[0].Total).toBe(saleOrder2.SaleOrderItems[0].Total)
-        expect(saleResult.entity[0].SaleOrderItems[0].UnitaryValue).toBe(saleOrder2.SaleOrderItems[0].UnitaryValue)
+        expect(salesResult.entity[0].Id).toBe(salesOrder2.Id)
+        expect(salesResult.entity[0].Customer_id).toBe(salesOrder2.Customer_id)
+        expect(salesResult.entity[0].Employee_id).toBe(salesOrder2.Employee_id)
+        expect(salesResult.entity[0].Total).toBe(salesOrder2.Total)
+        expect(salesResult.entity[0].SalesOrderItems[0].Id).toBe(salesOrder2.SalesOrderItems[0].Id)
+        expect(salesResult.entity[0].Data.toString()).toBe(salesOrder2.Data.toString())
+        expect(salesResult.entity[0].SalesOrderItems[0].ProductId).toBe(salesOrder2.SalesOrderItems[0].ProductId)
+        expect(salesResult.entity[0].SalesOrderItems[0].Quantity).toBe(salesOrder2.SalesOrderItems[0].Quantity)
+        expect(salesResult.entity[0].SalesOrderItems[0].Total).toBe(salesOrder2.SalesOrderItems[0].Total)
+        expect(salesResult.entity[0].SalesOrderItems[0].UnitaryValue).toBe(salesOrder2.SalesOrderItems[0].UnitaryValue)
 
 
-        expect(saleResult.entity[1].Id).toBe(saleOrder.Id)
-        expect(saleResult.entity[1].Supplier_id).toBe(saleOrder.Supplier_id)
-        expect(saleResult.entity[1].Employee_id).toBe(saleOrder.Employee_id)
-        expect(saleResult.entity[1].Total).toBe(saleOrder.Total)
-        expect(saleResult.entity[1].Data.toString()).toBe(saleOrder.Data.toString())
-        expect(saleResult.entity[1].SaleOrderItems[0].Id).toBe(saleOrder.SaleOrderItems[0].Id)
-        expect(saleResult.entity[1].SaleOrderItems[0].ProductId).toBe(saleOrder.SaleOrderItems[0].ProductId)
-        expect(saleResult.entity[1].SaleOrderItems[0].Quantity).toBe(saleOrder.SaleOrderItems[0].Quantity)
-        expect(saleResult.entity[1].SaleOrderItems[0].Total).toBe(saleOrder.SaleOrderItems[0].Total)
-        expect(saleResult.entity[1].SaleOrderItems[0].UnitaryValue).toBe(saleOrder.SaleOrderItems[0].UnitaryValue)
+        expect(salesResult.entity[1].Id).toBe(salesOrder.Id)
+        expect(salesResult.entity[1].Customer_id).toBe(salesOrder.Customer_id)
+        expect(salesResult.entity[1].Employee_id).toBe(salesOrder.Employee_id)
+        expect(salesResult.entity[1].Total).toBe(salesOrder.Total)
+        expect(salesResult.entity[1].Data.toString()).toBe(salesOrder.Data.toString())
+        expect(salesResult.entity[1].SalesOrderItems[0].Id).toBe(salesOrder.SalesOrderItems[0].Id)
+        expect(salesResult.entity[1].SalesOrderItems[0].ProductId).toBe(salesOrder.SalesOrderItems[0].ProductId)
+        expect(salesResult.entity[1].SalesOrderItems[0].Quantity).toBe(salesOrder.SalesOrderItems[0].Quantity)
+        expect(salesResult.entity[1].SalesOrderItems[0].Total).toBe(salesOrder.SalesOrderItems[0].Total)
+        expect(salesResult.entity[1].SalesOrderItems[0].UnitaryValue).toBe(salesOrder.SalesOrderItems[0].UnitaryValue)
 
 
-        expect(saleResult.total_page).toBe(1)
-        expect(saleResult.number_of_elements).toBe(2)
-        expect(saleResult.current_page).toBe(page);
+        expect(salesResult.total_page).toBe(1)
+        expect(salesResult.number_of_elements).toBe(2)
+        expect(salesResult.current_page).toBe(page);
        
 
     })
 
-    it("delete by id sale order", async()=>{
-        const supplierRepository= new SupplierRepositorySequelize();
+    it("delete by id sales order", async()=>{
+        const customerRepository= new CustomerRepositorySequelize();
         const address=new Address("MG","city1","bairro","35170-300","ruab","123")
-        const supplier=SupplierFactory.createWithAddress("supplier1","15.287.087/0001-05",
-        "supplier@hotmail.com",new Date("2000-01-01"),address)
+        const customer=CustomerFactory.createWithAddress("customer1","15.287.087/0001-05",
+        "customer@hotmail.com",new Date("2000-01-01"),address)
         
-        await supplierRepository.create(supplier);
-        const supplierModel=await SupplierModel.findOne({where:{id:supplier.Id}, include: [{ model: AddressModel}]})
+        await customerRepository.create(customer);
+        const customerModel=await CustomerModel.findOne({where:{id:customer.Id}, include: [{ model: AddressModel}]})
 
         const employeeRepository= new EmployeeRepositorySequelize();
         const employee=EmployeeFactory.createWithAddress("employee1","12345678",
@@ -276,17 +276,17 @@ describe("test the saleOrderReppository", () => {
         const product=ProductFactory.create("product1",10,10,category.Id);
         await productRepository.create(product);
     
-        const saleOrderRepository= new SaleOrderRepositorySequelize(sequelize);
-        const saleOrderItem=SaleOrderItemFactory.create(product.Id,10,product.Price)
-        const saleOrder=SaleOrderFactory.create(supplier.Id,employee.Id,[saleOrderItem]);
+        const salesOrderRepository= new SalesOrderRepositorySequelize(sequelize);
+        const salesOrderItem=SalesOrderItemFactory.create(product.Id,10,product.Price)
+        const salesOrder=SalesOrderFactory.create(customer.Id,employee.Id,[salesOrderItem]);
         
-        await saleOrderRepository.create(saleOrder);
+        await salesOrderRepository.create(salesOrder);
         
-        await saleOrderRepository.deleteById(saleOrder.Id);
+        await salesOrderRepository.deleteById(salesOrder.Id);
 
-        const saleOrderModel=await SaleOrderModel.findOne({where:{id:saleOrder.Id},include:[{model:SaleOrderItemModel}]})
+        const salesOrderModel=await SaleOrderModel.findOne({where:{id:salesOrder.Id},include:[{model:SaleOrderItemModel}]})
 
-        expect(saleOrderModel).toBeNull();
+        expect(salesOrderModel).toBeNull();
 
     })
 

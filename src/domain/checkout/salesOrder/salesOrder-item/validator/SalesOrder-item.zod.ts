@@ -1,20 +1,20 @@
 import ValidatorInterface from "../../../../@shared/validator/Validator.interface";
-import SaleOrderItem from "../entity/SaleOrder-item";
+import SalesOrderItem from "../entity/SalesOrder-item";
 import z, { ZodError } from "zod"
-export interface SaleOrderItemInterface{
+export interface SalesOrderItemInterface{
     id:string,
-    saleOrder_id:string,
+    salesOrder_id:string,
     product_id:string,
     quantity:number,
     unitaryValue:number,
     total:number
 }
-export default class SaleOrderItemZodValidator implements ValidatorInterface<SaleOrderItem>{
-    validate(entity: SaleOrderItem): void {
+export default class SalesOrderItemZodValidator implements ValidatorInterface<SalesOrderItem>{
+    validate(entity: SalesOrderItem): void {
        const validation=z.object({
-        id:z.string().trim().min(1,"Invalid saleOrder-item id!"),
+        id:z.string().trim().min(1,"Invalid salesOrder-item id!"),
         product_id:z.string().trim().min(1,"Invalid  product_id!"),
-        quantity:z.number().min(1,"saleOrderItems must have at least 1 item!"),
+        quantity:z.number().min(1,"SalesOrderItems must have at least 1 item!"),
         unitaryValue:z.number().min(0,"The unit value must not be less than zero!"),
         total:z.number().min(0).min(0,"The total must not be less than zero!"),
        })
@@ -24,7 +24,7 @@ export default class SaleOrderItemZodValidator implements ValidatorInterface<Sal
         const err= error as ZodError
         err.errors.forEach((res)=>{
             entity.getNotification().insertErrors({
-                context:"saleOrder-item",
+                context:"salesOrder-item",
                 message:res.message
             })
         })

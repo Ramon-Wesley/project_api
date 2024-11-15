@@ -1,10 +1,8 @@
 import Entity from "../../../../@shared/entity/Entity";
 import NotificationError from "../../../../@shared/notification/NotificationError";
-import SaleOrderItemFactoryValidator from "../factory/SaleOrder-item.factory.validator";
+import SalesOrderItemFactoryValidator from "../factory/SalesOrder-item.factory.validator";
 
-
-export default class SaleOrderItem extends Entity{
-
+export default class SalesOrderItem extends Entity{
     private product_id:string;
     private quantity:number;
     private unitaryValue:number;
@@ -12,21 +10,19 @@ export default class SaleOrderItem extends Entity{
 
     constructor(id:string,product_id:string,quantity:number,unitaryValue:number){
             super(id)
-
             this.product_id=product_id;
             this.quantity=quantity;
             this.unitaryValue=unitaryValue
-            this.total=this.TotalValueSaleItem();
+            this.total=this.TotalValueSalesItem();
             this.validate()
             
          }
 
-          TotalValueSaleItem():number{
+          TotalValueSalesItem():number{
             return this.quantity * this.unitaryValue;
          }
 
-        
-         changeProductId(product_id:string){
+         changeProduct(product_id:string,name:string){
             this.product_id=product_id;
             this.validate()
          }
@@ -38,13 +34,13 @@ export default class SaleOrderItem extends Entity{
             this.unitaryValue=unitaryValue;
          }
          validate(){
-            SaleOrderItemFactoryValidator.create()
+            SalesOrderItemFactoryValidator.create()
             .validate(this)
             if(this.notification.hasErrors()){
                 throw new NotificationError(this.notification.getErrors())
             }
          }
-        
+      
          get ProductId():string{
             return this.product_id;
          }
