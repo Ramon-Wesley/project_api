@@ -23,6 +23,7 @@ export default class CreateCustomerUseCase implements useCaseInterface<CreateCus
             } 
             await this.customerRepository.create(customer)   
         } catch (error) {
+
             throw error
         }
     }

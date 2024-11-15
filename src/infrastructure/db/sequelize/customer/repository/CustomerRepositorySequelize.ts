@@ -5,8 +5,7 @@ import Customer from "../../../../../domain/customer/entity/Customer";
 import CustomerRepositoryInterface from "../../../../../domain/customer/repository/CustomerRepositoryInterface";
 import AddressModel from "../../address/model/AddressModel";
 import CustomerModel from "../model/CustomerModel";
-import CacheFactory from "../../../../cache/factory/CacheFactory";
-import FindCustomerOutDto from "../../../../../use-case/customer/find/FindCustomerOutDto";
+import DatabaseError from "../../../../../domain/@shared/Errors/DatabaseError";
 
 
 export default class CustomerRepositorySequelize implements CustomerRepositoryInterface{
@@ -19,9 +18,9 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
           return this.changeForCustomer(result)
       }
 
-      throw new Error("customer not found!!")
+      throw new DatabaseError("customer not found!\n")
   } catch (error) {
-    throw new Error("error when fetching customer with email record!\n"+error)
+    throw new DatabaseError("error find customer record\n")
   }
     
   }
@@ -51,7 +50,7 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
   }) 
   
   } catch (error) {
-    throw new Error("error creating customer record\n"+error)
+    throw new DatabaseError("error creating customer record!\n")
   }
   
     
@@ -64,9 +63,9 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
         if(result){
             return this.changeForCustomer(result)
         }
-        throw new Error("customer not found!")
+        throw new DatabaseError("customer not found!")
     } catch (error) {
-      throw new Error("error when fetching customer record!\n"+error)
+      throw new DatabaseError("error find customer record\n")
     }
         
     }
@@ -99,9 +98,9 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
           return;
         }
     
-        throw new Error('customer not found!');
+        throw new DatabaseError("customer not found!");
       } catch (error) {
-        throw new Error('Error updating customer record!\n' + error);
+        throw new DatabaseError('Error updating customer record!\n');
       }
     }
     async findAll(sort: "desc" | "asc"="desc", filter: string="", limit: number=7, page: number=1): Promise<RepositoryFindAllResult<Customer>> {
@@ -130,7 +129,7 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
            return findAllResult
           
       } catch (error) {
-        throw new Error("error listing customer record!\n"+error)
+        throw new DatabaseError("error listing customer record!\n")
       }
     }
 
@@ -140,7 +139,7 @@ export default class CustomerRepositorySequelize implements CustomerRepositoryIn
       try {
         await CustomerModel.destroy({where:{id:id}})
       } catch (error) {
-        throw new Error("error when deleting customer record!\n"+error)
+        throw new DatabaseError("error when deleting customer record!\n")
         
       }
     }

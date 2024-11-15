@@ -7,6 +7,7 @@ import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories"
 import GenericRouterInterface from "../../@shared/GenericRouterInterface";
 import ErrorResponseInterface from "../../@shared/ErrorResponseInterface";
 import NotificationError from "../../../../../domain/@shared/notification/NotificationError";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 
 export default class CustomerRouterCreate implements GenericRouterInterface<CreateCustomerInDto>{
 
@@ -19,9 +20,8 @@ export default class CustomerRouterCreate implements GenericRouterInterface<Crea
             res.status(StatusCodes.CREATED).send()
 
         } catch (error) {
-            const err=error as Error;
-            const status=err instanceof NotificationError ? StatusCodes.BAD_REQUEST: StatusCodes.INTERNAL_SERVER_ERROR
-            res.status(status).send(err)
+            const response=ErrorResponseMessage.execute(error as Error)
+            res.status(response.status).json(response)
         }
 
     }

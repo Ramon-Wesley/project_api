@@ -1,5 +1,7 @@
-export default interface UpdateCustomerInDto{
-    id:string;
+import FindCustomerINDto from "../find/FindCustomerINDto";
+
+export default interface UpdateCustomerInDto extends FindCustomerINDto{
+    
     name:string;
     cpf:string;
     email:string;

@@ -21,12 +21,16 @@ export default class CustomerZodValidator implements ValidatorInterface<Customer
       try {
         validation.parse(entity)
         } catch (error) {
+    
           const err=error as ZodError
           
        err.errors.forEach((res)=>{
+        console.log(res)
          entity.getNotification().insertErrors({
              context:"customer",
-              message:res.message
+             field:res.path.toString(),
+             message:res.message,
+              
             })
             })
 
