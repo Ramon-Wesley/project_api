@@ -6,10 +6,10 @@ import ProductFindAllOutDto from "./ProductFindAllOutDto";
 
 
 export default class ProductFindAllUseCase implements useCaseInterface<ProductFindAllInDto,ProductFindAllOutDto>{
-    private productRepository:ProductRepositoryInterface;
 
-    constructor(productRepository:ProductRepositoryInterface){
-        this.productRepository=productRepository;
+
+    constructor(private readonly productRepository:ProductRepositoryInterface){
+   
     }
 
     async execute(input: ProductFindAllInDto): Promise<ProductFindAllOutDto> {

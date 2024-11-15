@@ -5,4 +5,5 @@ export default interface ProductFindOutDto{
      quantity:number;
      category_id:string;
      isActive:boolean;
-}
+     version?:number
+} 

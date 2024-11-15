@@ -8,13 +8,14 @@ export default class Product extends Entity{
     private quantity:number;
     private category_id:string;
     private isActive:boolean=true;
-    
-    constructor(id:string,name:string,price:number,quantity:number,category_id:string){
+    private version:number;
+    constructor(id:string,name:string,price:number,quantity:number,category_id:string,version?:number){
         super(id)
         this.name=name;
         this.price=price
         this.quantity=quantity
         this.category_id=category_id
+        this.version=version ?? 0
         this.validate()
     }
 
@@ -61,6 +62,9 @@ export default class Product extends Entity{
         this.validate()
     }
     
+    addVersion( version:number){
+        this.version=this.version
+    }
     get Id(){
         return this.id
     }
@@ -78,5 +82,8 @@ export default class Product extends Entity{
     }
     get IsActive(){
         return this.isActive
+    }
+    get Version(){
+        return this.version
     }
 }

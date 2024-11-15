@@ -10,27 +10,24 @@ import ProductUpdateInDto from "./ProductUpdateInDto";
 
 
 export default class ProductUpdateUseCase implements useCaseInterface<ProductUpdateInDto,void>{
-    
-    private productRepository:ProductRepositoryInterface;
-    private categoryRepository:CategoryRepositoryInterface;
 
-    constructor(productRepository:ProductRepositoryInterface,categoryRepository:CategoryRepositoryInterface){
-        this.productRepository=productRepository;
-        this.categoryRepository=categoryRepository;
+    constructor(private readonly productRepository:ProductRepositoryInterface,private readonly categoryRepository:CategoryRepositoryInterface){
     }
     
     async execute(input: ProductUpdateInDto): Promise<void> {
         try {
-            console.log("INICIO--------")
-            const product=await this.productRepository.findById(input.id);
-            console.log("FIM---------")
-            const category=await this.categoryRepository.findById(input.category_id)
+           const [product,category]=await Promise.all([
+                this.productRepository.findById(input.id),
+                this.categoryRepository.findById(input.category_id)
+            ])
+
             
             if(product && category){
                 product.changeCategory_id(category.Id)
                 product.changeName(input.name)
                 product.changePrice(input.price)
-                product.changeQuantity(input.quantity)       
+                product.changeQuantity(input.quantity)  
+                product.addVersion(product.Version)
                 console.log(product)
                 await this.productRepository.updateById(input.id,product)
                 return

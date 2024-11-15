@@ -4,6 +4,7 @@ import CategoryModel from "../model/CategoryModel";
 import Category from "../../../../../../../domain/checkout/products/category/entity/Category";
 import CategoryRepositoryInterface from "../../../../../../../domain/checkout/products/category/repository/CategoryRepositoryInterface";
 import RepositoryFindAllResult from "../../../../../../../domain/@shared/repository/RepositoryFindAllResult";
+import DatabaseError from "../../../../../../../domain/@shared/Errors/DatabaseError";
 
 export default class CategoryRepositorySequelize implements CategoryRepositoryInterface{
     async create(entity: Category): Promise<void> {
@@ -14,7 +15,7 @@ export default class CategoryRepositorySequelize implements CategoryRepositoryIn
                 description:entity.Description
             })
         } catch (error) {
-            throw new Error("error creating category record\n"+error)
+            throw new DatabaseError("error creating category record\n")
         }
             
     }
@@ -26,9 +27,9 @@ export default class CategoryRepositorySequelize implements CategoryRepositoryIn
                 const result=new Category(findResult.id,findResult.name,findResult.description)
                 return result
             }
-            throw new Error("category not found!\n")
+            throw new DatabaseError("category not found!\n")
         } catch (error) {
-            throw new Error("error find category record\n"+error)
+            throw new DatabaseError("error find category record\n")
         }
        
         
@@ -62,14 +63,14 @@ export default class CategoryRepositorySequelize implements CategoryRepositoryIn
            };
            return findAllResult
       } catch (error) {
-        throw new Error("error listing category record!\n"+error)
+        throw new DatabaseError("error listing category record!\n")
       }
     }
     async deleteById(id: string): Promise<void> {
         try {
           await CategoryModel.destroy({where:{id:id}})
         } catch (error) {
-            throw new Error("error when deleting category record!\n"+error)
+            throw new DatabaseError("error when deleting category record!\n")
         }
     }
     async updateById(id: string, entity: Category): Promise<void> {
@@ -79,7 +80,7 @@ export default class CategoryRepositorySequelize implements CategoryRepositoryIn
                 description:entity.Description
             },{where:{id:id}})       
         } catch (error) {
-            throw new Error("error update category record\n"+error)
+            throw new DatabaseError("error when updating category record!\n")
         }
 }
 
