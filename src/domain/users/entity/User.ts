@@ -1,6 +1,7 @@
 import Entity from "../../@shared/entity/Entity";
 import NotificationError from "../../@shared/notification/NotificationError";
-import { RefreshToken } from "../../refreshToken/entity/RefreshToken";
+import { ForgotPassword } from "../../@shared/object-value/forgotPassword/ForgotPassword";
+import { RefreshToken } from "../../@shared/object-value/refreshToken/RefreshToken";
 import { Roles } from "../@shared/Roles";
 import UserFactoryValidator from "../factory/UserFactoryValidator";
 
@@ -11,12 +12,12 @@ export class User extends Entity {
     private isActive: boolean;
     private roles:Roles;
     private refreshToken?:RefreshToken
+    private forgotPassword?:ForgotPassword
     constructor(
          id: string,
          name: string,
          email: string,
          password: string,
-         refreshToken?:RefreshToken
     ) {
         super(id)
         this.name = name
@@ -24,7 +25,6 @@ export class User extends Entity {
         this.password = password
         this.isActive = true
         this.roles=Roles.EMPLOYEE
-        this.refreshToken=refreshToken
         this.validate()
     }
 
@@ -37,9 +37,14 @@ export class User extends Entity {
         }
     }
 
-    changeRefreshToken(refreshToken:RefreshToken){
+    insertRefreshToken(refreshToken:RefreshToken){
         this.refreshToken=refreshToken
     }
+
+    insertForgotPassword(forgotPassword:ForgotPassword){
+        this.forgotPassword=forgotPassword
+    }
+    
     changeRoleToAdmin() {
         this.roles = Roles.ADMIN
     }

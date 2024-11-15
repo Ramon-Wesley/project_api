@@ -1,14 +1,13 @@
-import ValidatorInterface from "../../@shared/validator/Validator.interface";
-import { RefreshToken } from "../entity/RefreshToken";
+import ValidatorInterface from "../../../validator/Validator.interface";
+import { RefreshToken } from "../RefreshToken";
 import z, { ZodError } from "zod"
 
     export class RefreshTokenZodValidator implements ValidatorInterface<RefreshToken>{
         validate(entity: RefreshToken): void {
           console.log(entity)
             const validation= z.object({
-                id:z.string().trim().min(1,"Invalid refresh token id!"),
-                expiresIn:z.string().trim().min(1,"Invalid refresh token expiresIn!"),
-                userId:z.string() .trim().min(1,"Invalid refresh token user_id!")
+                token:z.string().trim().min(1,"Invalid refresh token expiresIn!"),
+                expiresIn:z.date().min(new Date(),"Invalid refresh token expiresIn!")
             })
             
             try {

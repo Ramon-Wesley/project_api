@@ -1,5 +1,5 @@
 import { EncryptFactory } from "../../../infrastructure/providers/encripty/factory/EncryptFactory";
-import { RefreshToken } from "../../refreshToken/entity/RefreshToken";
+import { RefreshToken } from "../../@shared/object-value/refreshToken/RefreshToken";
 import { Roles } from "../@shared/Roles";
 import { User } from "../entity/User"
 import {v4 as uuidv4} from "uuid";
@@ -44,7 +44,7 @@ export class UserFactory{
                 ):User
                 {
                     const user =new User(id,name,email,password)
-                        user.changeRefreshToken(refreshToken)
+                        user.insertRefreshToken(refreshToken)
                         return user
                         
                   
