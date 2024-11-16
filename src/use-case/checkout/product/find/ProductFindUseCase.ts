@@ -27,8 +27,7 @@ export default class ProductFindUseCase implements useCaseInterface<ProductFindI
             return product
            
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+            throw error
         }
     }
     

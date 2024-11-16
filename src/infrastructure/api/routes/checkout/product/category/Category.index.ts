@@ -3,7 +3,7 @@ import CategoryRouterCreate from "./create/CategoryCreate.route";
 import CategoryRouterDelete from "./delete/CategoryDelete.route";
 import CategoryRouterFindAll from "./findAll/CategoryFindAll.route";
 import CategoryRouterFind from "./findById/CategoryFindById.route";
-import CategoryRouterUpdate from "./update/CustomerCreate.route";
+import CategoryRouterUpdate from "./update/CategoryCreate.route";
 
 
 const categoryRouterApp=RouterConfig.execute();

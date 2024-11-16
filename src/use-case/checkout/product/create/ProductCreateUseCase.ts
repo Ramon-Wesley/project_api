@@ -21,8 +21,7 @@ export default class ProductCreateUseCase implements useCaseInterface<ProductCre
             
             await this.productRepository.create(product)
         } catch (error) {
-            const err=error as Error
-            throw new Error(err.message)
+            throw error
         }
     }
 

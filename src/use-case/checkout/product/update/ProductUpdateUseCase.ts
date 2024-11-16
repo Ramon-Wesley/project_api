@@ -34,8 +34,7 @@ export default class ProductUpdateUseCase implements useCaseInterface<ProductUpd
             }
 
         } catch (error) {
-            const err=error as Error
-            throw new Error(err.message)
+            throw error
         }
     }
 

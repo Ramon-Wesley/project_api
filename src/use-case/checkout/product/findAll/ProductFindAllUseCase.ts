@@ -34,8 +34,7 @@ export default class ProductFindAllUseCase implements useCaseInterface<ProductFi
    
           return findResult;
         } catch (error) {
-            const err= error as Error;
-            throw new Error(err.message)
+            throw error
         }
     }
 }

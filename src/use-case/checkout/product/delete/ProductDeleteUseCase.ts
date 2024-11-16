@@ -18,8 +18,7 @@ export default class ProductDeleteUseCase implements useCaseInterface<ProductDel
             await this.productRepository.deleteById(input.id);
             
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);    
+            throw error   
         }
     }
 

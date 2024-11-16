@@ -1,11 +1,14 @@
 import ValidatorInterface from "../../../@shared/validator/Validator.interface";
+import { GenericZodValidator } from "../../../@shared/validator/zodValidator/GenericZodValidator";
 import Product from "../entity/Product";
-import z, { ZodError } from "zod";
+import z, { ZodSchema } from "zod";
 
-export default class ProductZodValidator implements ValidatorInterface<Product>{
- 
+export default class ProductZodValidator extends GenericZodValidator<Product>  implements ValidatorInterface<Product> {
  
     validate(entity: Product): void {
+        super.genericValidate(entity, this.generatedSchema(), "product");
+      }
+      private generatedSchema(): ZodSchema {
         const validation=z.object({
             id:z.string().trim().min(1,"Invalid product Id!"),
             name:z.string().trim().min(2,"The product name must be at least 2 characters long!"),
@@ -14,19 +17,7 @@ export default class ProductZodValidator implements ValidatorInterface<Product>{
             category_id:z.string().trim().min(1,"Invalid category Id!")
         })
 
-        try {
-        validation.parse(entity)
-        } catch (error) {
-            const err=error as ZodError
-
-            err.errors.forEach((res)=>{
-                entity.getNotification().insertErrors({
-                    context:"product",
-                    message:res.message
-                })
-            })
-        }
-    }
-
+        return validation
+      }
 
 }
