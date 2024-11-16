@@ -3,6 +3,7 @@ import { SignInDto } from "../../../../../use-case/user/signIn/SignInDto";
 import { StatusCodes } from "http-status-codes";
 import { SignInUseCase } from "../../../../../use-case/user/signIn/SignInUseCase";
 import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 
 
 export class UserSignInRouter{
@@ -14,7 +15,9 @@ export class UserSignInRouter{
             const response=await useCase.execute(request)
             return res.status(StatusCodes.OK).send(response)
         } catch (error) {
-            return res.status(StatusCodes.UNAUTHORIZED).send(error +"batata")
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
     }
     

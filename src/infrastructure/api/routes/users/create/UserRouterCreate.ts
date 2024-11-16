@@ -4,6 +4,7 @@ import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories"
 import CreateUserUseCase from "../../../../../use-case/user/create/CreateUserUseCase";
 import { StatusCodes } from "http-status-codes";
 import NotificationError from "../../../../../domain/@shared/notification/NotificationError";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 
 
 export class UserRouterCreate{
@@ -19,9 +20,9 @@ export class UserRouterCreate{
             res.status(StatusCodes.CREATED).send()
 
         } catch (error) {
-            const err=error as Error;
-            const status=err instanceof NotificationError ? StatusCodes.BAD_REQUEST: StatusCodes.INTERNAL_SERVER_ERROR
-            res.status(status).send(err)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
     }
 
