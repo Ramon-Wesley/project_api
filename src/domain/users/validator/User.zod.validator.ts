@@ -1,10 +1,14 @@
 
 import ValidatorInterface from "../../@shared/validator/Validator.interface";
-import z, { ZodError } from "zod"
+import z, { ZodError, ZodSchema } from "zod"
 import { User } from "../entity/User";
+import { GenericZodValidator } from "../../@shared/validator/zodValidator/GenericZodValidator";
 
-export class UserZodValidator implements ValidatorInterface<User>{
-    validate(entity: User): void {
+export class UserZodValidator extends GenericZodValidator<User>  implements ValidatorInterface<User>{
+  validate(entity: User): void {
+    super.genericValidate(entity, this.generatedSchema(), "user");
+  }
+  private generatedSchema(): ZodSchema {
 
         const validation= z.object({
             id:z.string().min(1,"Invalid user id!"),
@@ -17,23 +21,6 @@ export class UserZodValidator implements ValidatorInterface<User>{
             })
         })       
 
-  try {
-    validation.parse(entity)
-    } catch (error) {
-      const err=error as ZodError
-      
-   err.errors.forEach((res)=>{
-     entity.getNotification().insertErrors({
-       context:"user",
-          message:res.message
-        })
-        })
-
-
-        
-      
+        return validation
     }
-    }
-
-
 }

@@ -1,11 +1,18 @@
 import BrazilianZipCodeValidator from "../../../validator/Brazilian.ZipCode.Validator";
 import ValidatorInterface from "../../../validator/Validator.interface";
+import { GenericZodValidator } from "../../../validator/zodValidator/GenericZodValidator";
 import Address from "../Address";
-import z, { ZodError } from "zod"
+import z, { ZodError, ZodSchema } from "zod"
 
 
-export default class AddressZodValidator implements ValidatorInterface<Address>{
+export default class AddressZodValidator extends GenericZodValidator<Address> implements ValidatorInterface<Address>{
+
+
     validate(entity: Address): void {
+        super.genericValidate(entity, this.generatedSchema(), "address");
+      }
+
+      private generatedSchema(): ZodSchema {
        const validation=z.object({
          uf:z.string().min(2).max(2),
          city:z.string(),
@@ -15,30 +22,7 @@ export default class AddressZodValidator implements ValidatorInterface<Address>{
          number:z.string().min(1),
          description:z.string()
        })
-
-
-       try {
-        validation.parse({
-            uf:entity.Uf,
-            city:entity.City,
-            neighborhood:entity.Neighborhood,
-            zipCode:entity.ZipCode,
-            street:entity.Street,
-            number:entity.Number,
-            description:entity.Description
-
-        })
-       } catch (error) {
-        const err= error as ZodError
-
-        err.errors.forEach((res)=>{
-            entity.getNotification().insertErrors({
-                context:"address",
-                message:res.message
-            })
-        })
-       }
-    }
-
+       return validation
+      }
 
 }

@@ -33,7 +33,7 @@ export class SignInUseCase implements useCaseInterface<SignInDto,SignOutDto>{
             }
             throw new Error("invalid credentials")
         } catch (error) {
-            throw new Error(error as string)
+            throw error
         }
     }
 

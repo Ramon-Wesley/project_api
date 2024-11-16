@@ -18,7 +18,7 @@ export default class CreateUserUseCase implements useCaseInterface<CreateUserInD
             user.changePassword(encripty)
             await this.userRepository.create(user)
         } catch (error) {
-            throw new Error(error as string)
+            throw error
         }
     }
 
