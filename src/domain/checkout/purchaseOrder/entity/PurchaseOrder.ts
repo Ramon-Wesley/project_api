@@ -13,12 +13,13 @@ export default class PurchaseOrder extends Entity{
     private purchaseOrderItems:PurchaseOrderItem[];
     private discount:number=0;
 
-    constructor(id:string,supplier_id:string,employee_id:string,purchaseOrderItems:PurchaseOrderItem[]){
+    constructor(id:string,supplier_id:string,employee_id:string,purchaseOrderItems:PurchaseOrderItem[],date?:Date){
         super(id)
         this.supplier_id=supplier_id;
         this.employee_id=employee_id;
         this.purchaseOrderItems=purchaseOrderItems;
         this.total=this.TotalValuePurchaseOrder();
+        this.data=date?date:new Date();
         this.validate();
        
     }

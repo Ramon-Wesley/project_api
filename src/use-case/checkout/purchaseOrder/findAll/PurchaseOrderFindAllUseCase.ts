@@ -33,8 +33,7 @@ export class PurchaseOrderFindAllUseCase implements useCaseInterface< PurchaseOr
 
             return findResult
         } catch (error) {
-            const err=error as Error
-            throw new Error(err.message)
+            throw error
         }
     }
 

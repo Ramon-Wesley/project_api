@@ -7,6 +7,7 @@ import useCaseInterface from "../../../@shared/UseCaseInterface";
 import PurchaseOrderUpdateInDto from "./PurchaseOrderUpdateInDto";
 import { PurchaseOrderFactory } from "../../../../domain/checkout/purchaseOrder/factory/PurchaseOrder.factory";
 import purchaseOrderItemFactory from "../../../../domain/checkout/purchaseOrder/purchaseOrder-item/factory/PurchaseOrder-item.factory";
+import { ErrorResponseMessage } from "../../../../infrastructure/api/routes/@shared/ErrorResponseMessage";
 
 export default class PurchaseOrderUpdateUseCase implements useCaseInterface<PurchaseOrderUpdateInDto,void>{
 
@@ -54,16 +55,18 @@ export default class PurchaseOrderUpdateUseCase implements useCaseInterface<Purc
                     productMap.get(res.product_id)?.increaseQuantity(res.quantity)
                 }
 
-                res.price=productMap.get(res.product_id)?.Price ?? res.price
-               
+           
 
             })
+            console.log("________________++++________-----__________________")
+            console.log(input)
             const purchaseItemResult=input.items.map((res)=>purchaseOrderItemFactory.create(res.product_id,res.quantity,res.price))
-            const purchaseOrderResult=PurchaseOrderFactory.create(input.supplier_id,input.employee_id,purchaseItemResult)
+            const purchaseOrderResult=PurchaseOrderFactory.create(input.supplier_id,input.employee_id,purchaseItemResult,input.date)
             await this.purchaseOrderRepository.updateById(input.id,purchaseOrderResult,products)
 
         } catch (error) {
-            throw new Error(error as string);
+            
+            throw error
         }
     }
 

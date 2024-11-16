@@ -9,8 +9,8 @@ export class PurchaseOrderDeleteUseCase implements useCaseInterface<PurchaseOrde
         try {
             await this.purchaseOrderRepository.deleteById(input.id);
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+            
+            throw error
         }
     }
 }
