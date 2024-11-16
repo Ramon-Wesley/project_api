@@ -26,8 +26,7 @@ export default class CategoryFindUseCase implements useCaseInterface<CategoryFin
             }
             throw new Error("category not found!")
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+            throw error
         }
     }
     

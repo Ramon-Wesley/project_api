@@ -32,8 +32,7 @@ export default class CategoryFindAllUseCase implements useCaseInterface<Category
    
           return findResult;
         } catch (error) {
-            const err= error as Error;
-            throw new Error(err.message)
+            throw error
         }
     }
 }

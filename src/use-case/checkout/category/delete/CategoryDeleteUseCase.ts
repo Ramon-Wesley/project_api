@@ -20,8 +20,7 @@ export default class CategoryDeleteUseCase implements useCaseInterface<CategoryD
                 throw new Error("Category not found!");
             }
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);    
+            throw error   
         }
     }
 

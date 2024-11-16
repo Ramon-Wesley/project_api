@@ -14,8 +14,7 @@ export default class CategoryCreateUseCase implements useCaseInterface<CategoryC
             const category=CategoryFactory.create(input.name,input.description)
             await this.categoryRepository.create(category)
         } catch (error) {
-            const err=error as Error
-            throw new Error(err.message)
+            throw error
         }
     }
 
