@@ -23,8 +23,7 @@ export default class UpdateEmployeeUseCase implements useCaseInterface<UpdateEmp
             } 
             await this.employeeRepository.updateById(input.id,employee);
         } catch (error) {
-            const err=error as Error
-            throw new Error(err.message)
+            throw error
         }
     }
 

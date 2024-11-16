@@ -19,8 +19,7 @@ export default class DeleteEmployeeUseCase implements useCaseInterface<DeleteEmp
                 throw new Error("Employee not found!");
             }
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);    
+            throw error    
         }
     }
 

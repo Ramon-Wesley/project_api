@@ -49,8 +49,7 @@ export default class FindEmployeeUseCase implements useCaseInterface<FindEmploye
             }
             throw new Error("employee not found!")
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+            throw error
         }
     }
     

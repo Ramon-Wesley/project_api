@@ -54,8 +54,7 @@ export default class FindAllEmployeeUseCase implements useCaseInterface<FindAllE
         await cache.insertValue(key,JSON.stringify(findResult))
           return findResult;
         } catch (error) {
-            const err= error as Error;
-            throw new Error(err.message)
+            throw error
         }
     }
 }

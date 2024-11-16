@@ -3,21 +3,26 @@ import {StatusCodes} from "http-status-codes"
 import UpdateEmployeeInDto from "../../../../../use-case/employee/update/UpdateEmployeeINDto";
 import UpdateEmployeeUseCase from "../../../../../use-case/employee/update/UpdateEmployeeUseCase";
 import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
+import FindEmployeeINDto from "../../../../../use-case/employee/find/FindEmployeeNDto";
 
 
 export default class EmployeeRouterUpdate{
 
 
-    async execute(req:Request<{},{},UpdateEmployeeInDto>,res:Response){
-        const employeeRepository=DbFactoryRepositories.employeeRepository()
-        const usecase= new UpdateEmployeeUseCase(employeeRepository)
+    async execute(req:Request<FindEmployeeINDto,{},UpdateEmployeeInDto>,res:Response){
         try {
+            const employeeRepository=DbFactoryRepositories.employeeRepository()
+            const usecase= new UpdateEmployeeUseCase(employeeRepository)
             const request=req.body
+            request.id=req.params.id
+
             await usecase.execute(request);
             res.status(StatusCodes.OK).send();
         } catch (error) {
-            const err= error as Error;
-            res.status(StatusCodes.BAD_REQUEST).send(err.message)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
 
     }

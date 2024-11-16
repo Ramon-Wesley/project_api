@@ -21,8 +21,7 @@ export default class CreateEmployeeUseCase implements useCaseInterface<CreateEmp
             } 
             await this.employeeRepository.create(employee)   
         } catch (error) {
-            const err=error as Error
-            throw new Error(error as string)
+            throw error
         }
     }
 

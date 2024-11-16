@@ -1,10 +1,15 @@
 
-import z, { ZodError } from "zod"
+import z, { ZodError, ZodSchema } from "zod"
 import ValidatorInterface from "../../@shared/validator/Validator.interface";
 import CpfValidator from "../../@shared/validator/Cpf.Validator";
 import Employee from "../entity/Employee";
-export default class EmployeeZodValidator implements ValidatorInterface<Employee>{
-    validate(entity: Employee): void {
+import { GenericZodValidator } from "../../@shared/validator/zodValidator/GenericZodValidator";
+export default class EmployeeZodValidator extends GenericZodValidator<Employee> implements ValidatorInterface<Employee> {
+
+  validate(entity: Employee): void {
+    super.genericValidate(entity, this.generatedSchema(), "employee");
+  }
+  private generatedSchema(): ZodSchema {
         const validation= z.object({
                 id:z.string().min(1,"Invalid employee id!"),
                 name:z.string().min(2,"The employee name must be at least 2 characters long!"),
@@ -17,23 +22,6 @@ export default class EmployeeZodValidator implements ValidatorInterface<Employee
                   })
             })
             
-
-      try {
-        validation.parse(entity)
-        } catch (error) {
-          const err=error as ZodError
-          
-       err.errors.forEach((res)=>{
-         entity.getNotification().insertErrors({
-           context:"employee",
-              message:res.message
-            })
-            })
-
-
-            
-          
+            return validation
         }
-    }
-
 }

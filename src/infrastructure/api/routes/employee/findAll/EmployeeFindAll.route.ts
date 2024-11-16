@@ -7,17 +7,18 @@ import FindAllEmployeeInDto from "../../../../../use-case/employee/findAll/FindA
 import FindAllEmployeeUseCase from "../../../../../use-case/employee/findAll/FindAllEmployeeUseCase";
 import DbFactory from "../../../../db/factory/DbFactory";
 import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 
 
 export default class EmployeeRouterFindAll{
 
 
     async execute(req:Request<{},{},{},FindAllEmployeeInDto>,res:Response){
-        const employeeRepository=DbFactoryRepositories.employeeRepository()
-        
-        const usecase= new FindAllEmployeeUseCase(employeeRepository)
         
         try {
+            const employeeRepository=DbFactoryRepositories.employeeRepository()
+            
+            const usecase= new FindAllEmployeeUseCase(employeeRepository)
             const request:FindAllEmployeeInDto={
                 limit:Number(req.query.limit)|| 7,
                 page:Number(req.query.page) || 1,
@@ -28,8 +29,9 @@ export default class EmployeeRouterFindAll{
             const result=await usecase.execute(request);
             res.status(StatusCodes.OK).send(result);
         } catch (error) {
-            const err= error as Error;
-            res.status(StatusCodes.BAD_REQUEST).send(err.message)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
 
     }
