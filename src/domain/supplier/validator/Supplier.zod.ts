@@ -1,11 +1,16 @@
 
 import Supplier from "../entity/Supplier";
-import z, { ZodError } from "zod"
+import z, { ZodError, ZodSchema } from "zod"
 import ValidatorInterface from "../../@shared/validator/Validator.interface";
 import CnpjValidator from "../../@shared/validator/Cnpj.Validator";
+import { GenericZodValidator } from "../../@shared/validator/zodValidator/GenericZodValidator";
 
-export default class SupplierZodValidator implements ValidatorInterface<Supplier>{
-    validate(entity: Supplier): void {
+export default class SupplierZodValidator extends GenericZodValidator<Supplier> implements ValidatorInterface<Supplier> {
+  
+  validate(entity: Supplier): void {
+    super.genericValidate(entity, this.generatedSchema(), "supplier");
+  }
+  private generatedSchema(): ZodSchema {
         const validation= z.object({
                 id:z.string().min(1,"Invalid supplier id!"),
                 name:z.string().min(2,"The supplier name must be at least 2 characters long!"),
@@ -18,23 +23,6 @@ export default class SupplierZodValidator implements ValidatorInterface<Supplier
                   })
             })
             
-
-      try {
-        validation.parse(entity)
-        } catch (error) {
-          const err=error as ZodError
-          
-       err.errors.forEach((res)=>{
-         entity.getNotification().insertErrors({
-           context:"supplier",
-              message:res.message
-            })
-            })
-
-
-            
-          
+            return validation
         }
-    }
-
 }

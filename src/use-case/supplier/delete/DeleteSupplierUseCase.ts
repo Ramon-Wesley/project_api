@@ -20,8 +20,7 @@ export default class DeleteSupplierUseCase implements useCaseInterface<DeleteSup
                 throw new Error("Supplier not found!");
             }
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);    
+            throw error    
         }
     }
 

@@ -7,17 +7,18 @@ import FindAllSupplierInDto from "../../../../../use-case/supplier/findAll/FindA
 import FindAllSupplierUseCase from "../../../../../use-case/supplier/findAll/FindAllSupplierUseCase";
 import DbFactory from "../../../../db/factory/DbFactory";
 import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 
 
 export default class SupplierRouterFindAll{
 
 
     async execute(req:Request<{},{},{},FindAllSupplierInDto>,res:Response){
-        const supplierRepository=DbFactoryRepositories.supplierRepository()
-        
-        const usecase= new FindAllSupplierUseCase(supplierRepository)
         
         try {
+            const supplierRepository=DbFactoryRepositories.supplierRepository()
+            
+            const usecase= new FindAllSupplierUseCase(supplierRepository)
             const request:FindAllSupplierInDto={
                 limit:Number(req.query.limit)|| 7,
                 page:Number(req.query.page) || 1,
@@ -28,8 +29,9 @@ export default class SupplierRouterFindAll{
             const result=await usecase.execute(request);
             res.status(StatusCodes.OK).send(result);
         } catch (error) {
-            const err= error as Error;
-            res.status(StatusCodes.BAD_REQUEST).send(err.message)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
 
     }

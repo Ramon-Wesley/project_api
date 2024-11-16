@@ -23,8 +23,7 @@ export default class UpdateSupplierUseCase implements useCaseInterface<UpdateSup
             } 
             await this.supplierRepository.updateById(input.id,supplier);
         } catch (error) {
-            const err=error as Error
-            throw new Error(err.message)
+            throw error
         }
     }
 

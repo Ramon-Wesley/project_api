@@ -22,8 +22,7 @@ export default class CreateSupplierUseCase implements useCaseInterface<CreateSup
             } 
             await this.supplierRepository.create(supplier)   
         } catch (error) {
-            const err=error as Error
-            throw new Error(error as string)
+            throw error
         }
     }
 

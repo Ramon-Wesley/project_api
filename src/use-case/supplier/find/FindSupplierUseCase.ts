@@ -49,8 +49,7 @@ export default class FindSupplierUseCase implements useCaseInterface<FindSupplie
             }
             throw new Error("supplier not found!")
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+            throw error
         }
     }
     
