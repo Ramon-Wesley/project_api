@@ -28,4 +28,11 @@ export default class CustomerFactory{
                 customer.changeAddress(address)
                 return customer
             }
+    
+            static createWithId( id:string,name:string,cpf:string,email:string,date_of_birth:Date):Customer
+            {
+                const customer=new Customer(id,name,cpf,email,date_of_birth);
+                return customer
+            }
+             
 }

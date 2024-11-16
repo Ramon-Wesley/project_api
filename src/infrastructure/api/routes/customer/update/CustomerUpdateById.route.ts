@@ -7,23 +7,26 @@ import UpdateCustomerInDto from "../../../../../use-case/customer/update/UpdateC
 import UpdateCustomerUseCase from "../../../../../use-case/customer/update/UpdateCustomerUseCase";
 import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
 import FindCustomerINDto from "../../../../../use-case/customer/find/FindCustomerINDto";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 
 
 export default class CustomerRouterUpdate{
 
 
     async execute(req:Request<FindCustomerINDto,{},UpdateCustomerInDto>,res:Response){
-        const customerRepository=DbFactoryRepositories.customerRepository()
-        const usecase= new UpdateCustomerUseCase(customerRepository)
         try {
+            const customerRepository=DbFactoryRepositories.customerRepository()
+            const usecase= new UpdateCustomerUseCase(customerRepository)
+            const id=req.params.id
             const request=req.body
-            const id=req.params
-            request.id=id.id
-            await usecase.execute(request);
-            res.status(StatusCodes.OK).send();
+            request.id=id
+            await usecase.execute(request)
+            res.status(StatusCodes.CREATED).send()
+
         } catch (error) {
-            const err= error as Error;
-            res.status(StatusCodes.BAD_REQUEST).send(err.message)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
 
     }

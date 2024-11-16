@@ -12,16 +12,17 @@ import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 export default class CustomerRouterCreate implements GenericRouterInterface<CreateCustomerInDto>{
 
     async  execute(req:Request<{},{},CreateCustomerInDto>,res:Response){
-        const customerRepository=DbFactoryRepositories.customerRepository()
-        const usecase= new CreateCustomerUseCase(customerRepository)
         try {
+            const customerRepository=DbFactoryRepositories.customerRepository()
+            const usecase= new CreateCustomerUseCase(customerRepository)
             const request=req.body
             await usecase.execute(request)
             res.status(StatusCodes.CREATED).send()
 
         } catch (error) {
             const response=ErrorResponseMessage.execute(error as Error)
-            res.status(response.status).json(response)
+
+            res.status(response.status).send(response)
         }
 
     }

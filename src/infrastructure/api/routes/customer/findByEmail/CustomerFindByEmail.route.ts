@@ -5,22 +5,24 @@ import FindByEmailCustomerInDto from "../../../../../use-case/customer/findByEma
 import FindByEmailCustomerUseCase from "../../../../../use-case/customer/findByEmail/findByEmailCustomerUseCase";
 import DbFactory from "../../../../db/factory/DbFactory";
 import DbFactoryRepositories from "../../../../db/factory/DbFactoryRepositories";
+import { ErrorResponseMessage } from "../../@shared/ErrorResponseMessage";
 
 
 export default class CustomerRouterFindByEmail{
 
     async execute(req:Request<{},{},FindByEmailCustomerInDto>,res:Response){
 
-        const customerRepository=DbFactoryRepositories.customerRepository()
-        const usecase= new FindByEmailCustomerUseCase(customerRepository)
         try {
+            const customerRepository=DbFactoryRepositories.customerRepository()
+            const usecase= new FindByEmailCustomerUseCase(customerRepository)
             const request=req.body
             console.log(request)
             const result= await usecase.execute(request);
             res.status(StatusCodes.OK).send(result);
         } catch (error) {
-            const err= error as Error;
-            res.status(StatusCodes.BAD_REQUEST).send(err.message)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
 
     }
