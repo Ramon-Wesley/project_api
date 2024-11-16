@@ -2,7 +2,6 @@ import Entity from "../../../@shared/entity/Entity";
 import NotificationError from "../../../@shared/notification/NotificationError";
 import SalesOrderFactoryValidator from "../factory/SalesOrder.factory.validator";
 import SalesOrderItem from "../salesOrder-item/entity/SalesOrder-item";
-import SalesOrderItemFactory from "../salesOrder-item/factory/SalesOrder-item.factory";
 export default class SalesOrder extends Entity{
 
     private customer_id:string;
@@ -12,12 +11,13 @@ export default class SalesOrder extends Entity{
     private salesOrderItems:SalesOrderItem[];
     private discount:number=0;
 
-    constructor(id:string,customer_id:string,employee_id:string,salesOrderItems:SalesOrderItem[]){
+    constructor(id:string,customer_id:string,employee_id:string,salesOrderItems:SalesOrderItem[],data?:Date){
         super(id)
         this.customer_id=customer_id;
         this.employee_id=employee_id;
         this.salesOrderItems=salesOrderItems;
         this.total=this.TotalValueSalesOrder();
+        this.data=data?data:new Date();
         this.validate();
        
     }

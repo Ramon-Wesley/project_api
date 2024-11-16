@@ -58,11 +58,11 @@ export default class SalesOrderUpdateUseCase implements useCaseInterface<SalesOr
 
             })
             const salesItemResult=input.items.map((res)=>SalesOrderItemFactory.create(res.product_id,res.quantity,res.price))
-            const salesOrderResult=SalesOrderFactory.create(input.customer_id,input.employee_id,salesItemResult)
+            const salesOrderResult=SalesOrderFactory.create(input.customer_id,input.employee_id,salesItemResult,input.date)
             await this.salesOrderRepository.updateById(input.id,salesOrderResult,products)
 
         } catch (error) {
-            throw new Error(error as string);
+            throw error
         }
     }
 

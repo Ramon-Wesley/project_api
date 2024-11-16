@@ -4,20 +4,21 @@ import { SalesOrderFindByIdINDto } from "../../../../../../use-case/checkout/sal
 import DbFactoryRepositories from "../../../../../db/factory/DbFactoryRepositories";
 import { Request, Response } from "express";
 import NotificationError from "../../../../../../domain/@shared/notification/NotificationError";
+import { ErrorResponseMessage } from "../../../@shared/ErrorResponseMessage";
 
 export class SalesOrderDeleteRouter {
     execute(req:Request<SalesOrderFindByIdINDto>,res:Response) {
         
+        try {
         const salesOrderRepository=DbFactoryRepositories.salesOrderRepository()
         const usecase= new SalesOrderDeleteUseCase(salesOrderRepository)
-        try {
             const request=req.params as SalesOrderFindByIdINDto
             usecase.execute(request)
             res.status(StatusCodes.OK).send()
         } catch (error) {
-            const err= error as Error;
-            const status=error instanceof NotificationError ? StatusCodes.BAD_REQUEST : StatusCodes.INTERNAL_SERVER_ERROR
-            res.status(status).send(err.message)
-        }
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
     }
+}

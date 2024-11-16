@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes"
 import SalesOrderUpdateInDto from "../../../../../../use-case/checkout/salesOrder/update/SalesOrderUpdateInDto"
 import { SalesOrderFindByIdINDto } from "../../../../../../use-case/checkout/salesOrder/findById/SalesOrderFindByIdINDto"
 import SalesOrderCreateUseCase from "../../../../../../use-case/checkout/salesOrder/create/SalesOrderCreateUseCase"
+import { ErrorResponseMessage } from "../../../@shared/ErrorResponseMessage"
 
 export default class PurchaseOrderRouterUpdate{
     async execute(req:Request<SalesOrderFindByIdINDto,{},SalesOrderUpdateInDto>,res:Response){
@@ -21,8 +22,9 @@ export default class PurchaseOrderRouterUpdate{
             await usecase.execute(request)
             res.status(StatusCodes.CREATED).send()
         } catch (error) {
-            const err= error as Error;
-            res.status(StatusCodes.BAD_REQUEST).send(err.message)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
 
     }

@@ -4,6 +4,7 @@ import DbFactoryRepositories from "../../../../../db/factory/DbFactoryRepositori
 import { SalesOrderFindAllInDto } from "../../../../../../use-case/checkout/salesOrder/findAll/SalesOrderFindAllInDto"
 import { StatusCodes } from "http-status-codes"
 import NotificationError from "../../../../../../domain/@shared/notification/NotificationError"
+import { ErrorResponseMessage } from "../../../@shared/ErrorResponseMessage"
 
 export class SalesOrderRouteFindAll{
 
@@ -17,9 +18,9 @@ export class SalesOrderRouteFindAll{
             
         } catch (error) {
             
-            const err= error as Error;
-            const status= err instanceof NotificationError ? StatusCodes.BAD_REQUEST : StatusCodes.INTERNAL_SERVER_ERROR
-            res.status(status).send(err.message)
+            const response=ErrorResponseMessage.execute(error as Error)
+
+            res.status(response.status).send(response)
         }
     }
 }    

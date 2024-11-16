@@ -9,8 +9,7 @@ export class SalesOrderDeleteUseCase implements useCaseInterface<SalesOrderDelet
         try {
             await this.salesOrderRepository.deleteById(input.id);
         } catch (error) {
-            const err=error as Error;
-            throw new Error(err.message);
+            throw error
         }
     }
 }
